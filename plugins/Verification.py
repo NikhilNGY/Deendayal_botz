@@ -2,7 +2,7 @@ from pyrogram import *
 from pyrogram.errors import MessageNotModified
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 from database.verify_db import vr_db 
-from info import ADMINS
+from Deendayal_botz.info import ADMINS
 from datetime import datetime
 
 @Client.on_message(filters.command("verification") & filters.private & filters.user(ADMINS))
