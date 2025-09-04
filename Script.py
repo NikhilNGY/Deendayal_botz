@@ -1,4 +1,4 @@
-class Script:
+class script:
     # Start / Help / About
     START_TXT = (
         "<strong><blockquote>"
