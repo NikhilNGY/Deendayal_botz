@@ -1,132 +1,157 @@
 import pymongo
 from info import DATABASE_URI, DATABASE_NAME
-
 import logging
+
+# Logger setup
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
 
-myclient = pymongo.MongoClient(DATABASE_URI)
-mydb = myclient[DATABASE_NAME]
-mycol = mydb['CONNECTION'] 
+# MongoDB connection
+try:
+    myclient = pymongo.MongoClient(DATABASE_URI)
+    mydb = myclient[DATABASE_NAME]
+    mycol = mydb["CONNECTION"]
+except Exception as e:
+    logger.exception(f"MongoDB connection failed: {e}", exc_info=True)
+    raise
 
 
-async def add_connection(group_id, user_id):
-    query = mycol.find_one(
-        { "_id": user_id },
-        { "_id": 0, "active_group": 0 }
-    )
-    if query is not None:
-        group_ids = [x["group_id"] for x in query["group_details"]]
-        if group_id in group_ids:
-            return False
+# -------------------------------
+# ADD CONNECTION
+# -------------------------------
+async def add_connection(group_id: str, user_id: str) -> bool:
+    """Add a connection between user and group."""
+    try:
+        query = mycol.find_one({"_id": user_id}, {"_id": 0, "active_group": 0})
 
-    group_details = {
-        "group_id" : group_id
-    }
+        if query:
+            group_ids = [x["group_id"] for x in query.get("group_details", [])]
+            if group_id in group_ids:
+                return False
 
-    data = {
-        '_id': user_id,
-        'group_details' : [group_details],
-        'active_group' : group_id,
-    }
+        group_details = {"group_id": group_id}
 
-    if mycol.count_documents( {"_id": user_id} ) == 0:
-        try:
+        if mycol.count_documents({"_id": user_id}) == 0:
+            # New user record
+            data = {
+                "_id": user_id,
+                "group_details": [group_details],
+                "active_group": group_id,
+            }
             mycol.insert_one(data)
-            return True
-        except:
-            logger.exception('Some error occurred!', exc_info=True)
-
-    else:
-        try:
+        else:
+            # Update existing record
             mycol.update_one(
-                {'_id': user_id},
+                {"_id": user_id},
                 {
                     "$push": {"group_details": group_details},
-                    "$set": {"active_group" : group_id}
-                }
+                    "$set": {"active_group": group_id},
+                },
             )
-            return True
-        except:
-            logger.exception('Some error occurred!', exc_info=True)
+        return True
 
-        
-async def active_connection(user_id):
-
-    query = mycol.find_one(
-        { "_id": user_id },
-        { "_id": 0, "group_details": 0 }
-    )
-    if not query:
-        return None
-
-    group_id = query['active_group']
-    return int(group_id) if group_id != None else None
+    except Exception as e:
+        logger.exception(f"Error adding connection: {e}", exc_info=True)
+        return False
 
 
-async def all_connections(user_id):
-    query = mycol.find_one(
-        { "_id": user_id },
-        { "_id": 0, "active_group": 0 }
-    )
-    if query is not None:
-        return [x["group_id"] for x in query["group_details"]]
-    else:
+# -------------------------------
+# ACTIVE CONNECTION
+# -------------------------------
+async def active_connection(user_id: str):
+    """Return the active group_id for a user, or None."""
+    try:
+        query = mycol.find_one({"_id": user_id}, {"_id": 0, "group_details": 0})
+        if not query:
+            return None
+        return int(query.get("active_group")) if query.get("active_group") else None
+    except Exception as e:
+        logger.exception(f"Error fetching active connection: {e}", exc_info=True)
         return None
 
 
-async def if_active(user_id, group_id):
-    query = mycol.find_one(
-        { "_id": user_id },
-        { "_id": 0, "group_details": 0 }
-    )
-    return query is not None and query['active_group'] == group_id
+# -------------------------------
+# ALL CONNECTIONS
+# -------------------------------
+async def all_connections(user_id: str):
+    """Return all group_ids for a user."""
+    try:
+        query = mycol.find_one({"_id": user_id}, {"_id": 0, "active_group": 0})
+        if query:
+            return [x["group_id"] for x in query.get("group_details", [])]
+        return None
+    except Exception as e:
+        logger.exception(f"Error fetching all connections: {e}", exc_info=True)
+        return None
 
 
-async def make_active(user_id, group_id):
-    update = mycol.update_one(
-        {'_id': user_id},
-        {"$set": {"active_group" : group_id}}
-    )
-    return update.modified_count != 0
+# -------------------------------
+# IF ACTIVE
+# -------------------------------
+async def if_active(user_id: str, group_id: str) -> bool:
+    """Check if a group is the active one for a user."""
+    try:
+        query = mycol.find_one({"_id": user_id}, {"_id": 0, "group_details": 0})
+        return query is not None and query.get("active_group") == group_id
+    except Exception as e:
+        logger.exception(f"Error checking active group: {e}", exc_info=True)
+        return False
 
 
-async def make_inactive(user_id):
-    update = mycol.update_one(
-        {'_id': user_id},
-        {"$set": {"active_group" : None}}
-    )
-    return update.modified_count != 0
+# -------------------------------
+# MAKE ACTIVE
+# -------------------------------
+async def make_active(user_id: str, group_id: str) -> bool:
+    """Set a group as active for a user."""
+    try:
+        update = mycol.update_one({"_id": user_id}, {"$set": {"active_group": group_id}})
+        return update.modified_count > 0
+    except Exception as e:
+        logger.exception(f"Error making group active: {e}", exc_info=True)
+        return False
 
 
-async def delete_connection(user_id, group_id):
+# -------------------------------
+# MAKE INACTIVE
+# -------------------------------
+async def make_inactive(user_id: str) -> bool:
+    """Set active_group to None for a user."""
+    try:
+        update = mycol.update_one({"_id": user_id}, {"$set": {"active_group": None}})
+        return update.modified_count > 0
+    except Exception as e:
+        logger.exception(f"Error making user inactive: {e}", exc_info=True)
+        return False
 
+
+# -------------------------------
+# DELETE CONNECTION
+# -------------------------------
+async def delete_connection(user_id: str, group_id: str) -> bool:
+    """Remove a group connection for a user."""
     try:
         update = mycol.update_one(
-            {"_id": user_id},
-            {"$pull" : { "group_details" : {"group_id":group_id} } }
+            {"_id": user_id}, {"$pull": {"group_details": {"group_id": group_id}}}
         )
         if update.modified_count == 0:
             return False
-        query = mycol.find_one(
-            { "_id": user_id },
-            { "_id": 0 }
-        )
-        if len(query["group_details"]) >= 1:
-            if query['active_group'] == group_id:
-                prvs_group_id = query["group_details"][len(query["group_details"]) - 1]["group_id"]
 
+        query = mycol.find_one({"_id": user_id}, {"_id": 0})
+        if not query:
+            return False
+
+        if query.get("group_details"):
+            # If deleted group was active, switch to the last group in list
+            if query.get("active_group") == group_id:
+                last_group_id = query["group_details"][-1]["group_id"]
                 mycol.update_one(
-                    {'_id': user_id},
-                    {"$set": {"active_group" : prvs_group_id}}
+                    {"_id": user_id}, {"$set": {"active_group": last_group_id}}
                 )
         else:
-            mycol.update_one(
-                {'_id': user_id},
-                {"$set": {"active_group" : None}}
-            )
+            # No groups left → deactivate
+            mycol.update_one({"_id": user_id}, {"$set": {"active_group": None}})
+
         return True
     except Exception as e:
-        logger.exception(f'Some error occurred! {e}', exc_info=True)
+        logger.exception(f"Error deleting connection: {e}", exc_info=True)
         return False
-  
