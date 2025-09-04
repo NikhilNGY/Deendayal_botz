@@ -1,85 +1,147 @@
 {
-    "name": "Deendayal_dhakad",
-    "description": "When you going to send file on telegram channel this bot will save that in database, So you can search that easily in inline mode",
-    "stack": "container",
-    "keywords": [
-      "telegram",
-      "auto-filter",
-      "filter",
-      "best",
-      "indian",
-      "pyrogram",
-      "media",
-      "search",
-      "channel",
-      "index",
-      "inline"
-    ],
-    "website": "https://github.com/Deendayal423/Deendayal_dhakad",
-    "repository": "https://github.com/Deendayal423/Deendayal_dhakad",
-    "env": {
-        "BOT_TOKEN": {
-            "description": "Your bot token.",
-            "required": true
-        },
-        "API_ID": {
-            "description": "Get this value from https://my.telegram.org",
-            "required": true
-        },
-        "API_HASH": {
-            "description": "Get this value from https://my.telegram.org",
-            "required": true
-        },
-        "CHANNELS": {
-            "description": "Username or ID of channel or group. Separate multiple IDs by space.",
-            "required": false
-        },
-        "ADMINS": {
-            "description": "Username or ID of Admin. Separate multiple Admins by space.",
-            "required": true
-        },
-        "PICS": {
-            "description": "Add some telegraph link of pictures .",
-            "required": false
-        },
-        "LOG_CHANNEL": {
-            "description": "Bot Logs,Give a channel id with -100xxxxxxx",
-            "required": true
-        },
-        "AUTH_USERS": {
-            "description": "Username or ID of users to give access of inline search. Separate multiple users by space.\nLeave it empty if you don't want to restrict bot usage.",
-            "required": false
-        },
-        "AUTH_CHANNEL": {
-            "description": "ID of channel.Make sure bot is admin in this channel. Without subscribing this channel users cannot use bot.",
-            "required": false
-        },
-        "DATABASE_URI": {
-            "description": "mongoDB URI. Get this value from https://www.mongodb.com.",
-            "required": true
-        },
-        "DATABASE_URI2": {
-            "description": "mongoDB URI. Get this value from https://www.mongodb.com.",
-            "required": true
-        },
-        "DATABASE_NAME": {
-            "description": "Name of the database in mongoDB.",
-            "required": false
-        },
-        "COLLECTION_NAME": {
-            "description": "Name of the collections. Defaults to Telegram_files. If you are using the same database, then use different collection name for each bot",
-            "value": "Telegram_files",
-            "required": false
-        }
+  "name": "Deendayal_dhakad",
+  "description": "Indexes Telegram channel/group media into MongoDB so users can search via inline mode. Includes admin tools, force-subscribe, and rich stats.",
+  "repository": "https://github.com/Deendayal423/Deendayal_dhakad",
+  "website": "https://github.com/Deendayal423/Deendayal_dhakad",
+  "keywords": [
+    "telegram",
+    "pyrogram",
+    "inline",
+    "search",
+    "media",
+    "auto-filter",
+    "filter",
+    "index",
+    "channel",
+    "group",
+    "bot"
+  ],
+
+  "stack": "heroku-22",
+
+  "env": {
+    "BOT_TOKEN": {
+      "description": "Telegram Bot token from @BotFather.",
+      "required": true
     },
-    "addons": [],
-    "buildpacks": [{
-        "url": "heroku/python"
-    }],
-    "formation": {
-        "worker": {
-            "quantity": 1,
-            "size": "eco"
-        }
+    "API_ID": {
+      "description": "Telegram API ID from https://my.telegram.org.",
+      "required": true
+    },
+    "API_HASH": {
+      "description": "Telegram API HASH from https://my.telegram.org.",
+      "required": true
+    },
+
+    "ADMINS": {
+      "description": "Space-separated list of admin user IDs or @usernames.",
+      "required": true
+    },
+    "CHANNELS": {
+      "description": "Space-separated IDs or @usernames of channels/groups to index.",
+      "required": false
+    },
+
+    "LOG_CHANNEL": {
+      "description": "Channel ID (e.g., -100xxxxxxxxxx) for bot logs. Bot must be admin.",
+      "required": true
+    },
+    "AUTH_USERS": {
+      "description": "Space-separated IDs/@usernames allowed to use inline search. Leave empty for public.",
+      "required": false
+    },
+    "AUTH_CHANNEL": {
+      "description": "Force-subscribe channel ID. Users must join to use the bot. Leave empty to disable.",
+      "required": false
+    },
+
+    "DATABASE_URI": {
+      "description": "Primary MongoDB connection string (SRV or standard).",
+      "required": true
+    },
+    "DATABASE_URI2": {
+      "description": "Secondary MongoDB connection string (for shards/overflow).",
+      "required": true
+    },
+    "DATABASE_NAME": {
+      "description": "MongoDB database name.",
+      "value": "Filter2",
+      "required": false
+    },
+    "COLLECTION_NAME": {
+      "description": "MongoDB collection name for media index.",
+      "value": "Telegram_files",
+      "required": false
+    },
+
+    "PICS": {
+      "description": "Space-separated Telegraph image URLs for /start splash.",
+      "required": false
+    },
+
+    "CACHE_TIME": {
+      "description": "Inline cache TTL in seconds.",
+      "value": "300",
+      "required": false
+    },
+
+    "USE_CAPTION_FILTER": {
+      "description": "Set to true to index/search by message captions.",
+      "value": "true",
+      "required": false
+    },
+
+    "IMDB": {
+      "description": "Enable IMDB lookup (true/false).",
+      "value": "false",
+      "required": false
+    },
+    "AUTO_FFILTER": {
+      "description": "Enable automatic filter replies in groups (true/false).",
+      "value": "true",
+      "required": false
+    },
+    "AUTO_DELETE": {
+      "description": "Auto-delete helper/welcome messages (true/false).",
+      "value": "true",
+      "required": false
+    },
+    "DELETE_TIME": {
+      "description": "Seconds before auto-deleting helper/welcome messages.",
+      "value": "900",
+      "required": false
+    },
+    "SINGLE_BUTTON": {
+      "description": "Show filename & size in a single button (true/false).",
+      "value": "true",
+      "required": false
+    },
+    "LONG_IMDB_DESCRIPTION": {
+      "description": "Use long IMDB plot (true/false).",
+      "value": "false",
+      "required": false
+    },
+    "SPELL_CHECK_REPLY": {
+      "description": "Suggest titles when query is misspelled (true/false).",
+      "value": "true",
+      "required": false
     }
+  },
+
+  "buildpacks": [
+    { "url": "heroku/python" }
+  ],
+
+  "formation": {
+    "worker": {
+      "quantity": 1,
+      "size": "eco"
+    }
+  },
+
+  "addons": [],
+
+  "scripts": {
+    "postdeploy": "echo 'App deployed. Configure env vars, then scale worker if needed.'"
+  }
 }
