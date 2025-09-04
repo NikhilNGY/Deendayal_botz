@@ -1,5 +1,5 @@
 from pyrogram import Client, filters
-from info import CHANNELS
+from Deendayal_botz.info import CHANNELS
 from database.ia_filterdb import save_file
 
 media_filter = filters.document | filters.video | filters.audio
