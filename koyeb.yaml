@@ -1,0 +1,6 @@
+services:
+  - name: deendayal-bot
+    type: worker
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python3 bot.py"
