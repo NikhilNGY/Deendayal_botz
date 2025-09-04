@@ -10,7 +10,7 @@ from Deendayal_botz.Bot import multi_clients, work_loads
 from Deendayal_botz.server.exceptions import FileNotFound, InvalidHash
 from Deendayal_botz.util.custom_dl import ByteStreamer
 from Deendayal_botz.util.render_template import render_page
-from info import MULTI_CLIENT
+from Deendayal_botz.info import MULTI_CLIENT
 
 # -------------------------------
 # CONSTANTS
