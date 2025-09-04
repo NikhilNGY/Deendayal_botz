@@ -21,9 +21,9 @@ from pyrogram.raw.all import layer as PYRO_LAYER
 from pyrogram import idle
 
 # project imports (keep these the same as in your project)
-from database.ia_filterdb import Media, Media2, choose_mediaDB, tempDict, db as clientDB
+from Deendayal_botz.database.ia_filterdb import Media, Media2, choose_mediaDB, tempDict, db as clientDB
+from Deendayal_botz.info import CAPTION_LANGUAGES
 from database.users_chats_db import db
-from info import *
 from utils import temp
 from script import script
 from plugins import web_server, check_expired_premium
