@@ -9,7 +9,7 @@ from pyrogram.types import (
 )
 from database.ia_filterdb import get_search_results
 from utils import is_req_subscribed, get_size, temp
-from info import CACHE_TIME, AUTH_USERS, AUTH_CHANNEL, CUSTOM_FILE_CAPTION
+from Deendayal_botz.info import CACHE_TIME, AUTH_USERS, AUTH_CHANNEL, CUSTOM_FILE_CAPTION
 from database.connections_mdb import active_connection
 
 logger = logging.getLogger(__name__)
