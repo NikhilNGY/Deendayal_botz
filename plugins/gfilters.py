@@ -9,7 +9,7 @@ from database.gfilters_mdb import(
 )
 from database.connections_mdb import active_connection
 from utils import get_file_id, gfilterparser, split_quotes
-from info import ADMINS
+from Deendayal_botz.info import ADMINS
 
 
 @Client.on_message(filters.command(['gfilter', 'addg']) & filters.incoming & filters.user(ADMINS))
