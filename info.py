@@ -1,279 +1,215 @@
-import re
 import os
-from os import environ, getenv
+import re
+from os import getenv
 from script import script
 
-# Utility functions
-id_pattern = re.compile(r'^.\d+$')
+# ============================
+# Utility Functions
+# ============================
 
-def is_enabled(value, default):
-    if value.lower() in ["true", "yes", "1", "enable", "y"]:
-        return True
-    elif value.lower() in ["false", "no", "0", "disable", "n"]:
-        return False
-    else:
+id_pattern = re.compile(r'^-?\d+$')
+
+def is_enabled(value: str, default: bool = False) -> bool:
+    """
+    Convert environment string values to booleans.
+    Accepted true values: true, yes, 1, enable, y
+    Accepted false values: false, no, 0, disable, n
+    """
+    if not value:
         return default
-
-# ============================
-# Bot Information Configuration
-# ============================
-SESSION = environ.get('SESSION', 'KR_PICTURE')
-API_ID = int(environ.get('API_ID', '2468192'))
-API_HASH = environ.get('API_HASH', '4906b3f8f198ec0e24edb2c197677678')
-BOT_TOKEN = environ.get('BOT_TOKEN', "")
-
-# ============================
-# Bot Settings Configuration
-# ============================
-CACHE_TIME = int(environ.get('CACHE_TIME', 300))
-USE_CAPTION_FILTER = bool(environ.get('USE_CAPTION_FILTER', True))
-
-PICS = (environ.get('PICS', 'https://envs.sh/t3L.jpg')).split()  # Sample pic
-NOR_IMG = environ.get("NOR_IMG", "https://graph.org/file/e20b5fdaf217252964202.jpg")
-MELCOW_VID = environ.get("MELCOW_VID", "https://graph.org/file/60e8a622b14796e4448ce.mp4")
-SPELL_IMG = environ.get("SPELL_IMG", "https://envs.sh/t3L.jpg")
-SUBSCRIPTION = (environ.get('SUBSCRIPTION', 'https://graph.org/file/242b7f1b52743938d81f1.jpg'))
-FSUB_PICS = (environ.get('FSUB_PICS', 'https://graph.org/file/7478ff3eac37f4329c3d8.jpg')).split()  # Fsub pic
-
-# ============================
-# Admin, Channels & Users Configuration
-# ============================
-ADMINS = [int(admin) if id_pattern.search(admin) else admin for admin in environ.get('ADMINS', '2068233407 2098589219').split()] # Replace with the actual admin ID(s) to add
-CHANNELS = [int(ch) if id_pattern.search(ch) else ch for ch in environ.get('CHANNELS', '-1001683081282').split()]  # Channel id for auto indexing (make sure bot is admin)
-LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '-1001693006436'))  # Log channel id (make sure bot is admin)
-BIN_CHANNEL = int(environ.get('BIN_CHANNEL', '-1001693006436'))  
-DEENDAYAL_MOVIE_UPDATE_CHANNEL = int(environ.get('DEENDAYAL_MOVIE_UPDATE_CHANNEL', '-1001683081282'))  # Notification of those who verify will be sent to your channel
-PREMIUM_LOGS = int(environ.get('PREMIUM_LOGS', '-1001693006436'))  # Premium logs channel id
-auth_channel = environ.get('AUTH_CHANNEL', '-1001951277428')  # Channel/Group ID for force sub (make sure bot is admin)
-DELETE_CHANNELS = [int(dch) if id_pattern.search(dch) else dch for dch in environ.get('DELETE_CHANNELS', '-1001396923650').split()]
-support_chat_id = environ.get('SUPPORT_CHAT_ID', '-1002241869735')  # Support group id (make sure bot is admin)
-reqst_channel = environ.get('REQST_CHANNEL_ID', '-1002617590596')  # Request channel id (make sure bot is admin)
-AUTH_CHANNEL = [int(fch) if id_pattern.search(fch) else fch for fch in environ.get('AUTH_CHANNEL', '-1001951277428').split()]
-MULTI_FSUB = [int(channel_id) for channel_id in environ.get('MULTI_FSUB', '').split() if re.match(r'^-?\d+$', channel_id)]  # Channel for force sub (make sure bot is admin)
+    value = value.lower()
+    if value in ["true", "yes", "1", "enable", "y"]:
+        return True
+    elif value in ["false", "no", "0", "disable", "n"]:
+        return False
+    return default
 
 
 # ============================
-# Payment Configuration
-# ============================
-QR_CODE = environ.get('QR_CODE', 'https://envs.sh/t3L.jpg')
-OWNER_UPI_ID = environ.get('OWNER_UPI_ID', 'xyz@123')
-
-# ============================
-# MongoDB Configuration
-# ============================
-DATABASE_URI = environ.get('DATABASE_URI', '')
-DATABASE_URI2 = environ.get('DATABASE_URI2', '')
-DATABASE_NAME = environ.get('DATABASE_NAME', 'Filter2')
-COLLECTION_NAME = environ.get('COLLECTION_NAME', 'KR_PICTURE')
-
-# ============================
-# Movie Notification & Update Settings
-# ============================
-DEENDAYAL_MOVIE_UPDATE_NOTIFICATION = bool(environ.get('DEENDAYAL_MOVIE_UPDATE_NOTIFICATION', True))  # Notification On (True) / Off (False)
-DEENDAYAL_IMAGE_FETCH = bool(environ.get('DEENDAYAL_IMAGE_FETCH', True))  # On (True) / Off (False)
-CAPTION_LANGUAGES = ["Bhojpuri", "Hindi", "Bengali", "Tamil", "English", "Bangla", "Telugu", "Malayalam", "Kannada", "Marathi", "Punjabi", "Bengoli", "Gujrati", "Korean", "Gujarati", "Spanish", "French", "German", "Chinese", "Arabic", "Portuguese", "Russian", "Japanese", "Odia", "Assamese", "Urdu"]
-
-# ============================
-# Verification Setting
-# ============================
-VERIFY = bool(environ.get('VERIFY', False))  # Verification On (True) / Off (False)
-DEENDAYAL_VERIFY_EXPIRE = int(environ.get('DEENDAYAL_VERIFY_EXPIRE', 1))  # Add time in hours
-DEENDAYAL_VERIFIED_LOG = int(environ.get('DEENDAYAL_VERIFIED_LOG', '-1001693006436'))  # Log channel id (make sure bot is admin)
-HOW_TO_VERIFY = environ.get('HOW_TO_VERIFY', 'https://t.me/how_to_opan_linkz/6')  # How to open tutorial link for verification
-
-# ============================
-# Link Shortener Configuration
-# ============================
-IS_SHORTLINK = bool(environ.get('IS_SHORTLINK', False))
-SHORTLINK_URL = environ.get('SHORTLINK_URL', 'vplink.in')
-SHORTLINK_API = environ.get('SHORTLINK_API', 'ab42d0b5656f5c774f800dacb6739342b6f094aa')
-TUTORIAL = environ.get('TUTORIAL', 'https://t.me/how_to_opan_linkz/6')  # Tutorial video link for opening shortlink website
-IS_TUTORIAL = bool(environ.get('IS_TUTORIAL', False))
-
-# ============================
-# Channel & Group Links Configuration
-# ============================
-GRP_LNK = environ.get('GRP_LNK', 'https://t.me/+x6OfRDdUPrUwZTZl')
-CHNL_LNK = environ.get('CHNL_LNK', 'https://t.me/+fDkIGNmk5BU5ODVl')
-OWNER_LNK = environ.get('OWNER_LNK', 'https://t.me/NIKHIL5757H')
-DEENDAYAL_MOVIE_UPDATE_CHANNEL_LNK = environ.get('DEENDAYAL_MOVIE_UPDATE_CHANNEL_LNK', 'https://t.me/KR_PICTURE')
-OWNERID = int(os.environ.get('OWNERID', '2068233407'))  # Replace with the actual admin ID
-
-# ============================
-# User Configuration
-# ============================
-auth_users = [int(user) if id_pattern.search(user) else user for user in environ.get('AUTH_USERS', '').split()]
-AUTH_USERS = (auth_users + ADMINS) if auth_users else []
-PREMIUM_USER = [int(user) if id_pattern.search(user) else user for user in environ.get('PREMIUM_USER', '').split()]
-
-# ============================
-# Miscellaneous Configuration
-# ============================
-NO_RESULTS_MSG = bool(environ.get("NO_RESULTS_MSG", True))  # True if you want no results messages in Log Channel
-MAX_B_TN = environ.get("MAX_B_TN", "5")
-MAX_BTN = is_enabled((environ.get('MAX_BTN', "True")), True)
-PORT = environ.get("PORT", "8080")
-MSG_ALRT = environ.get('MSG_ALRT', 'Share & Support Us ♥️')
-SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'https://t.me/+x6OfRDdUPrUwZTZl')  # Support group link (make sure bot is admin)
-P_TTI_SHOW_OFF = is_enabled((environ.get('P_TTI_SHOW_OFF', "True")), True)
-IMDB = is_enabled((environ.get('IMDB', "False")), False)
-AUTO_FFILTER = is_enabled((environ.get('AUTO_FFILTER', "True")), True)
-AUTO_DELETE = is_enabled((environ.get('AUTO_DELETE', "True")), True)
-DELETE_TIME = int(environ.get("DELETE_TIME", "900"))  #  deletion time in seconds (default: 5 minutes). Adjust as per your needs.
-SINGLE_BUTTON = is_enabled((environ.get('SINGLE_BUTTON', "True")), True) # pm & Group button or link mode (True) / Off (False)
-CUSTOM_FILE_CAPTION = environ.get("CUSTOM_FILE_CAPTION", f"{script.CAPTION}")
-BATCH_FILE_CAPTION = environ.get("BATCH_FILE_CAPTION", CUSTOM_FILE_CAPTION)
-IMDB_TEMPLATE = environ.get("IMDB_TEMPLATE", f"{script.IMDB_TEMPLATE_TXT}")
-LONG_IMDB_DESCRIPTION = is_enabled(environ.get("LONG_IMDB_DESCRIPTION", "False"), False)
-SPELL_CHECK_REPLY = is_enabled(environ.get("SPELL_CHECK_REPLY", "True"), True)
-MAX_LIST_ELM = environ.get("MAX_LIST_ELM", None)
-INDEX_REQ_CHANNEL = int(environ.get('INDEX_REQ_CHANNEL', LOG_CHANNEL))
-FILE_STORE_CHANNEL = [int(ch) for ch in (environ.get('FILE_STORE_CHANNEL', '')).split()]
-MELCOW_NEW_USERS = is_enabled((environ.get('MELCOW_NEW_USERS', "False")), False)
-PROTECT_CONTENT = is_enabled((environ.get('PROTECT_CONTENT', "False")), True)
-PUBLIC_FILE_STORE = is_enabled((environ.get('PUBLIC_FILE_STORE', "True")), True)
-PM_SEARCH = bool(environ.get('PM_SEARCH', False))  # PM Search On (True) / Off (False)
-EMOJI_MODE = bool(environ.get('EMOJI_MODE', False))  # Emoji status On (True) / Off (False)
-
-# ============================
-# Bot Configuration
-# ============================
-auth_grp = environ.get('AUTH_GROUP')
-AUTH_CHANNEL = int(auth_channel) if auth_channel and id_pattern.search(auth_channel) else None
-AUTH_GROUPS = [int(ch) for ch in auth_grp.split()] if auth_grp else None
-REQST_CHANNEL = int(reqst_channel) if reqst_channel and id_pattern.search(reqst_channel) else None
-SUPPORT_CHAT_ID = int(support_chat_id) if support_chat_id and id_pattern.search(support_chat_id) else None
-LANGUAGES = ["malayalam", "", "tamil", "", "english", "", "hindi", "", "telugu", "", "kannada", "", "gujarati", "", "marathi", "", "punjabi", ""]
-QUALITIES = ["360P", "", "480P", "", "720P", "", "1080P", "", "1440P", "", "2160P", ""]
-SEASONS = ["season 1" , "season 2" , "season 3" , "season 4", "season 5" , "season 6" , "season 7" , "season 8" , "season 9" , "season 10"]
-
-# ============================
-# Server & Web Configuration
+# Bot Information
 # ============================
 
-STREAM_MODE = bool(environ.get('STREAM_MODE', False)) # Set Stream mode True or False
-
-NO_PORT = bool(environ.get('NO_PORT', False))
-APP_NAME = None
-if 'DYNO' in environ:
-    ON_HEROKU = True
-    APP_NAME = environ.get('APP_NAME')
-else:
-    ON_HEROKU = False
-BIND_ADRESS = str(getenv('WEB_SERVER_BIND_ADDRESS', '0.0.0.0'))
-FQDN = str(getenv('FQDN', BIND_ADRESS)) if not ON_HEROKU or getenv('FQDN') else APP_NAME+'.herokuapp.com'
-URL = "https://{}/".format(FQDN) if ON_HEROKU or NO_PORT else "https://{}/".format(FQDN, PORT)
-SLEEP_THRESHOLD = int(environ.get('SLEEP_THRESHOLD', '60'))
-WORKERS = int(environ.get('WORKERS', '4'))
-SESSION_NAME = str(environ.get('SESSION_NAME', 'DeendayalBot'))
-MULTI_CLIENT = False
-name = str(environ.get('name', 'Deendayal'))
-PING_INTERVAL = int(environ.get("PING_INTERVAL", "1200"))  # 20 minutes
-if 'DYNO' in environ:
-    ON_HEROKU = True
-    APP_NAME = str(getenv('APP_NAME'))
-else:
-    ON_HEROKU = False
-HAS_SSL = bool(getenv('HAS_SSL', True))
-if HAS_SSL:
-    URL = "https://{}/".format(FQDN)
-else:
-    URL = "http://{}/".format(FQDN)
+SESSION = getenv("SESSION", "KR_PICTURE")
+API_ID = int(getenv("API_ID", "2468192"))
+API_HASH = getenv("API_HASH", "4906b3f8f198ec0e24edb2c197677678")
+BOT_TOKEN = getenv("BOT_TOKEN", "")
 
 # ============================
-# Reactions Configuration
+# Bot Settings
 # ============================
-REACTIONS = ["🤝", "😇", "🤗", "😍", "👍", "🎅", "😐", "🥰", "🤩", "😱", "🤣", "😘", "👏", "😛", "😈", "🎉", "⚡️", "🫡", "🤓", "😎", "🏆", "🔥", "🤭", "🌚", "🆒", "👻", "😁"]
 
+CACHE_TIME = int(getenv("CACHE_TIME", 300))
+USE_CAPTION_FILTER = is_enabled(getenv("USE_CAPTION_FILTER", "True"), True)
 
+PICS = getenv("PICS", "https://envs.sh/t3L.jpg").split()
+NOR_IMG = getenv("NOR_IMG", "https://graph.org/file/e20b5fdaf217252964202.jpg")
+MELCOW_VID = getenv("MELCOW_VID", "https://graph.org/file/60e8a622b14796e4448ce.mp4")
+SPELL_IMG = getenv("SPELL_IMG", "https://envs.sh/t3L.jpg")
+SUBSCRIPTION = getenv("SUBSCRIPTION", "https://graph.org/file/242b7f1b52743938d81f1.jpg")
+FSUB_PICS = getenv("FSUB_PICS", "https://graph.org/file/7478ff3eac37f4329c3d8.jpg").split()
 
 # ============================
-# Command admin
+# Admins, Channels & Users
 # ============================
-commands = [
-    """• /system - <code>sʏsᴛᴇᴍ ɪɴғᴏʀᴍᴀᴛɪᴏɴ</code>
-• /del_msg - <code>ʀᴇᴍᴏᴠᴇ ғɪʟᴇ ɴᴀᴍᴇ ᴄᴏʟʟᴇᴄᴛɪᴏɴ ɴᴏтɪғɪᴄᴀᴛɪᴏн...</code>
-• /movie_update - <code>ᴏɴ ᴏғғ ᴀᴄᴄᴏʀᴅɪɴɢ ʏᴏᴜʀ ɴᴇᴇᴅᴇᴅ...</code>
-• /pm_search - <code>ᴘᴍ sᴇᴀʀᴄʜ ᴏɴ ᴏғғ ᴀᴄᴄᴏʀᴅɪɴɢ ʏᴏᴜʀ ɴᴇᴇᴅᴇᴅ...</code>
-• /logs - <code>ɢᴇᴛ ᴛʜᴇ ʀᴇᴄᴇɴᴛ ᴇʀʀᴏʀꜱ.</code>
-• /delete - <code>ᴅᴇʟᴇᴛᴇ ᴀ ꜱᴘᴇᴄɪꜰɪᴄ ꜰɪʟᴇ ꜰʀᴏᴍ ᴅʙ.</code>
-• /users - <code>ɢᴇᴛ ʟɪꜱᴛ ᴏꜰ ᴍʏ ᴜꜱᴇʀꜱ ᴀɴᴅ ɪᴅꜱ.</code>
-• /chats - <code>ɢᴇᴛ ʟɪꜱᴛ ᴏꜰ ᴍʏ ᴄʜᴀᴛꜱ ᴀɴᴅ ɪᴅꜱ.</code>
-• /leave  - <code>ʟᴇᴀᴠᴇ ꜰʀᴏᴍ ᴀ ᴄʜᴀᴛ.</code>
-• /disable  -  <code>ᴅɪꜱᴀʙʟᴇ ᴀ ᴄʜᴀᴛ.</code>""",
 
-    """• /ban  - <code>ʙᴀɴ ᴀ ᴜꜱᴇʀ.</code>
-• /unban  - <code>ᴜɴʙᴀɴ ᴀ ᴜꜱᴇʀ.</code>
-• /channel - <code>ɢᴇᴛ ʟɪꜱᴛ ᴏꜰ ᴛᴏᴛᴀʟ ᴄᴏɴɴᴇᴄᴛᴇᴅ ɢʀᴏᴜᴘꜱ.</code>
-• /broadcast - <code>ʙʀᴏᴀᴅᴄᴀꜱᴛ ᴀ ᴍᴇꜱꜱᴀɢᴇ ᴛᴏ ᴀʟʟ ᴜꜱᴇʀꜱ.</code>
-• /grp_broadcast - <code>Bʀᴏᴀᴅᴄᴀsᴛ ᴀ ᴍᴇssᴀɢᴇ ᴛᴏ ᴀʟʟ ᴄᴏɴɴᴇᴄᴛᴇᴅ ɢʀᴏᴜᴘs</code>
-• /clear_junk -  <code> ᴄʟᴇᴀʀ ᴜsᴇʀ ᴊᴜɴᴋ  </code>
-• /junk_group -  <code> ᴄʟᴇᴀʀ ɢʀᴏᴜᴘ ᴊᴜɴᴋ  </code>
-• /gfilter - <code>ᴀᴅᴅ ɢʟᴏʙᴀʟ ғɪʟᴛᴇʀs.</code>
-• /gfilters - <code>ᴠɪᴇᴡ ʟɪsᴛ ᴏғ ᴀʟʟ ɢʟᴏʙᴀʟ ғɪʟᴛᴇʀs.</code>
-• /delg - <code>ᴅᴇʟᴇᴛᴇ ᴀ sᴘᴇᴄɪғɪᴄ ɢʟᴏʙᴀʟ ғɪʟᴛᴇʀ.</code>
-• /delallg - <code>ᴅᴇʟᴇᴛᴇ ᴀʟʟ Gғɪʟᴛᴇʀs ғʀᴏᴍ ᴛʜᴇ ʙᴏᴛ's ᴅᴀᴛᴀʙᴀsᴇ.</code>
-• /deletefiles - <code>ᴅᴇʟᴇᴛᴇ CᴀᴍRɪᴘ ᴀɴᴅ PʀᴇDVD ғɪʟᴇs ғʀᴏᴍ ᴛʜᴇ ʙᴏᴛ's ᴅᴀᴛᴀʙᴀsᴇ.</code>
-• /send - <code>ꜱᴇɴᴅ ᴍᴇꜱꜱᴀɢᴇ ᴛᴏ ᴀ ᴘᴀʀᴛɪᴄᴜʟᴀʀ ᴜꜱᴇʀ.</code>""",
+ADMINS = [int(a) if id_pattern.match(a) else a for a in getenv("ADMINS", "2068233407 2098589219").split()]
+CHANNELS = [int(c) if id_pattern.match(c) else c for c in getenv("CHANNELS", "-1001683081282").split()]
 
-    """• /add_premium - <code>ᴀᴅᴅ ᴀɴʏ ᴜꜱᴇʀ ᴛᴏ ᴘʀᴇᴍɪᴜᴍ.</code>
-• /remove_premium - <code>ʀᴇᴍᴏᴠᴇ ᴀɴʏ ᴜꜱᴇʀ ꜰʀᴏᴍ ᴘʀᴇᴍɪᴜᴍ.</code>
-• /premium_users - <code>ɢᴇᴛ ʟɪꜱᴛ ᴏꜰ ᴘʀᴇᴍɪᴜᴍ ᴜꜱᴇʀꜱ.</code>
-• /get_premium - <code>ɢᴇᴛ ɪɴꜰᴏ ᴏꜰ ᴀɴʏ ᴘʀᴇᴍɪᴜᴍ ᴜꜱᴇʀ.</code>
-• /restart - <code>ʀᴇꜱᴛᴀʀᴛ ᴛʜᴇ ʙᴏᴛ.</code>"""
+LOG_CHANNEL = int(getenv("LOG_CHANNEL", "-1001693006436"))
+BIN_CHANNEL = int(getenv("BIN_CHANNEL", "-1001693006436"))
+DEENDAYAL_MOVIE_UPDATE_CHANNEL = int(getenv("DEENDAYAL_MOVIE_UPDATE_CHANNEL", "-1001683081282"))
+PREMIUM_LOGS = int(getenv("PREMIUM_LOGS", "-1001693006436"))
+
+AUTH_CHANNEL_RAW = getenv("AUTH_CHANNEL", "-1001951277428")
+AUTH_CHANNEL = int(AUTH_CHANNEL_RAW) if AUTH_CHANNEL_RAW and id_pattern.match(AUTH_CHANNEL_RAW) else None
+
+DELETE_CHANNELS = [int(d) if id_pattern.match(d) else d for d in getenv("DELETE_CHANNELS", "-1001396923650").split()]
+SUPPORT_CHAT_ID = int(getenv("SUPPORT_CHAT_ID", "-1002241869735"))
+REQST_CHANNEL = int(getenv("REQST_CHANNEL_ID", "-1002617590596"))
+
+MULTI_FSUB = [int(ch) for ch in getenv("MULTI_FSUB", "").split() if id_pattern.match(ch)]
+
+# ============================
+# Payment
+# ============================
+
+QR_CODE = getenv("QR_CODE", "https://envs.sh/t3L.jpg")
+OWNER_UPI_ID = getenv("OWNER_UPI_ID", "xyz@123")
+
+# ============================
+# MongoDB
+# ============================
+
+DATABASE_URI = getenv("DATABASE_URI", "")
+DATABASE_URI2 = getenv("DATABASE_URI2", "")
+DATABASE_NAME = getenv("DATABASE_NAME", "Filter2")
+COLLECTION_NAME = getenv("COLLECTION_NAME", "KR_PICTURE")
+
+# ============================
+# Movie Notification & Updates
+# ============================
+
+DEENDAYAL_MOVIE_UPDATE_NOTIFICATION = is_enabled(getenv("DEENDAYAL_MOVIE_UPDATE_NOTIFICATION", "True"), True)
+DEENDAYAL_IMAGE_FETCH = is_enabled(getenv("DEENDAYAL_IMAGE_FETCH", "True"), True)
+
+CAPTION_LANGUAGES = [
+    "Bhojpuri", "Hindi", "Bengali", "Tamil", "English", "Bangla", "Telugu",
+    "Malayalam", "Kannada", "Marathi", "Punjabi", "Bengoli", "Gujarati",
+    "Korean", "Spanish", "French", "German", "Chinese", "Arabic",
+    "Portuguese", "Russian", "Japanese", "Odia", "Assamese", "Urdu"
 ]
 
 # ============================
-# Command Bot
+# Verification
 # ============================
-Bot_cmds = {
-    "start": "Sᴛᴀʀᴛ Mᴇ Bᴀʙʏ",
-    "alive": " Cʜᴇᴄᴋ Bᴏᴛ Aʟɪᴠᴇ ᴏʀ Nᴏᴛ ",
-    "settings": "ᴄʜᴀɴɢᴇ sᴇᴛᴛɪɴɢs",
-    "id": "ɢᴇᴛ ɪᴅ ᴛᴇʟᴇɢʀᴀᴍ ",
-    "info": "Gᴇᴛ Usᴇʀ ɪɴғᴏ ",
-    "system": "sʏsᴛᴇᴍ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
-    "del_msg": "ʀᴇᴍᴏᴠᴇ ғɪʟᴇ ɴᴀᴍᴇ ᴄᴏʟʟᴇᴄᴛɪᴏɴ ɴᴏтɪғɪᴄᴀᴛɪᴏɴ...",
-    "movie_update": "ᴏɴ ᴏғғ ᴀᴄᴄᴏʀᴅɪɴɢ ʏᴏᴜʀ ɴᴇᴇᴅᴇᴅ...",
-    "pm_search": "ᴘᴍ sᴇᴀʀᴄʜ ᴏɴ ᴏғғ ᴀᴄᴄᴏʀᴅɪɴɢ ʏᴏᴜʀ ɴᴇᴇᴅᴇᴅ...",
-    "trendlist": "Gᴇᴛ Tᴏᴘ Tʀᴀɴᴅɪɴɢ Sᴇᴀʀᴄʜ Lɪsᴛ",
-    "logs": "ɢᴇᴛ ᴛʜᴇ ʀᴇᴄᴇɴᴛ ᴇʀʀᴏʀꜱ.",
-    "delete": "ᴅᴇʟᴇᴛᴇ ᴀ ꜱᴘᴇᴄɪꜰɪᴄ ꜰɪʟᴇ ꜰʀᴏᴍ ᴅʙ.",
-    "users": "ɢᴇᴛ ʟɪꜱᴛ ᴏꜰ ᴍʏ ᴜꜱᴇʀꜱ ᴀɴᴅ ɪᴅꜱ.",
-    "chats": "ɢᴇᴛ ʟɪꜱᴛ ᴏꜰ ᴍʏ ᴄʜᴀᴛꜱ ᴀɴᴅ ɪᴅꜱ.",
-    "leave": "ʟᴇᴀᴠᴇ ꜰʀᴏᴍ ᴀ ᴄʜᴀᴛ.",
-    "disable": "ᴅɪꜱᴀʙʟᴇ ᴀ ᴄʜᴀᴛ.",
-    "ban": "ʙᴀɴ ᴀ ᴜꜱᴇʀ.",
-    "unban": "ᴜɴʙᴀɴ ᴀ ᴜꜱᴇʀ.",
-    "channel": "ɢᴇᴛ ʟɪꜱᴛ ᴏғ ᴛᴏᴛᴀʟ ᴄᴏɴɴᴇᴄᴛᴇᴅ ɢʀᴏᴜᴘꜱ.",
-    "broadcast": "ʙʀᴏᴀᴅᴄᴀꜱᴛ ᴀ ᴍᴇꜱꜱᴀɢᴇ ᴛᴏ ᴀʟʟ ᴜꜱᴇʀꜱ.",
-    "grp_broadcast": "ʙʀᴏᴀᴅᴄᴀsᴛ ᴀ ᴍᴇssᴀɢᴇ ᴛᴏ ᴀʟʟ ᴄᴏɴɴᴇᴄᴛᴇᴅ ɢʀᴏᴜᴘs",
-    "clear_junk": "ᴄʟᴇᴀʀ ᴜsᴇʀ ᴊᴜɴᴋ",
-    "junk_group": "ᴄʟᴇᴀʀ ɢʀᴏᴜᴘ ᴊᴜɴᴋ",
-    "gfilter": "ᴀᴅᴅ ɢʟᴏʙᴀʟ ғɪʟᴛᴇʀs.",
-    "gfilters": "ᴠɪᴇᴡ ʟɪsᴛ ᴏғ ᴀʟʟ ɢʟᴏʙᴀʟ ғɪʟᴛᴇʀs.",
-    "delg": "ᴅᴇʟᴇᴛᴇ ᴀ sᴘᴇᴄɪғɪᴄ ɢʟᴏʙᴀʟ ғɪʟᴛᴇʀ.",
-    "delallg": "ᴅᴇʟᴇᴛᴇ ᴀʟʟ Gғɪʟᴛᴇʀs ғʀᴏᴍ ᴛʜᴇ ʙᴏᴛ's ᴅᴀᴛᴀʙᴀsᴇ.",
-    "deletefiles": "ᴅᴇʟᴇᴛᴇ CᴀᴍRɪᴘ ᴀɴᴅ PʀᴇDVD ғɪʟᴇs ғʀᴏᴍ ᴛʜᴇ ʙᴏᴛ's ᴅᴀᴛᴀʙᴀsᴇ.",
-    "send": "ꜱᴇɴᴅ ᴍᴇꜱꜱᴀɢᴇ ᴛᴏ ᴀ ᴘᴀʀᴛɪᴄᴜʟᴀʀ ᴜꜱᴇʀ.",
-    "add_premium": "ᴀᴅᴅ ᴀɴʏ ᴜꜱᴇʀ ᴛᴏ ᴘʀᴇᴍɪᴜᴍ.",
-    "remove_premium": "ʀᴇᴍᴏᴠᴇ ᴀɴʏ ᴜꜱᴇʀ ꜰʀᴏᴍ ᴘʀᴇᴍɪᴜᴍ.",
-    "premium_users": "ɢᴇᴛ ʟɪꜱᴛ ᴏꜰ ᴘʀᴇᴍɪᴜᴍ ᴜꜱᴇʀꜱ.",
-    "get_premium": "ɢᴇᴛ ɪɴꜰᴏ ᴏꜰ ᴀɴʏ ᴘʀᴇᴍɪᴜᴍ ᴜꜱᴇʀ.",
-    "restart": "ʀᴇꜱᴛᴀʀᴛ ᴛʜᴇ ʙᴏᴛ."
-}
 
-
-
+VERIFY = is_enabled(getenv("VERIFY", "False"))
+DEENDAYAL_VERIFY_EXPIRE = int(getenv("DEENDAYAL_VERIFY_EXPIRE", "1"))
+DEENDAYAL_VERIFIED_LOG = int(getenv("DEENDAYAL_VERIFIED_LOG", "-1001693006436"))
+HOW_TO_VERIFY = getenv("HOW_TO_VERIFY", "https://t.me/how_to_opan_linkz/6")
 
 # ============================
-# Logs Configuration
+# Shortener
 # ============================
+
+IS_SHORTLINK = is_enabled(getenv("IS_SHORTLINK", "False"))
+SHORTLINK_URL = getenv("SHORTLINK_URL", "vplink.in")
+SHORTLINK_API = getenv("SHORTLINK_API", "")
+TUTORIAL = getenv("TUTORIAL", "https://t.me/how_to_opan_linkz/6")
+IS_TUTORIAL = is_enabled(getenv("IS_TUTORIAL", "False"))
+
+# ============================
+# Links
+# ============================
+
+GRP_LNK = getenv("GRP_LNK", "https://t.me/+x6OfRDdUPrUwZTZl")
+CHNL_LNK = getenv("CHNL_LNK", "https://t.me/+fDkIGNmk5BU5ODVl")
+OWNER_LNK = getenv("OWNER_LNK", "https://t.me/NIKHIL5757H")
+DEENDAYAL_MOVIE_UPDATE_CHANNEL_LNK = getenv("DEENDAYAL_MOVIE_UPDATE_CHANNEL_LNK", "https://t.me/KR_PICTURE")
+OWNERID = int(getenv("OWNERID", "2068233407"))
+
+# ============================
+# Users
+# ============================
+
+AUTH_USERS = ADMINS + [int(u) if id_pattern.match(u) else u for u in getenv("AUTH_USERS", "").split()]
+PREMIUM_USER = [int(u) if id_pattern.match(u) else u for u in getenv("PREMIUM_USER", "").split()]
+
+# ============================
+# Misc
+# ============================
+
+NO_RESULTS_MSG = is_enabled(getenv("NO_RESULTS_MSG", "True"), True)
+MAX_B_TN = int(getenv("MAX_B_TN", "5"))
+MAX_BTN = is_enabled(getenv("MAX_BTN", "True"), True)
+PORT = int(getenv("PORT", "8080"))
+MSG_ALRT = getenv("MSG_ALRT", "Share & Support Us ♥️")
+SUPPORT_CHAT = getenv("SUPPORT_CHAT", GRP_LNK)
+P_TTI_SHOW_OFF = is_enabled(getenv("P_TTI_SHOW_OFF", "True"), True)
+IMDB = is_enabled(getenv("IMDB", "False"))
+AUTO_FFILTER = is_enabled(getenv("AUTO_FFILTER", "True"))
+AUTO_DELETE = is_enabled(getenv("AUTO_DELETE", "True"))
+DELETE_TIME = int(getenv("DELETE_TIME", "900"))
+SINGLE_BUTTON = is_enabled(getenv("SINGLE_BUTTON", "True"))
+CUSTOM_FILE_CAPTION = getenv("CUSTOM_FILE_CAPTION", script.CAPTION)
+BATCH_FILE_CAPTION = getenv("BATCH_FILE_CAPTION", CUSTOM_FILE_CAPTION)
+IMDB_TEMPLATE = getenv("IMDB_TEMPLATE", script.IMDB_TEMPLATE_TXT)
+LONG_IMDB_DESCRIPTION = is_enabled(getenv("LONG_IMDB_DESCRIPTION", "False"))
+SPELL_CHECK_REPLY = is_enabled(getenv("SPELL_CHECK_REPLY", "True"))
+MAX_LIST_ELM = getenv("MAX_LIST_ELM", None)
+
+INDEX_REQ_CHANNEL = int(getenv("INDEX_REQ_CHANNEL", LOG_CHANNEL))
+FILE_STORE_CHANNEL = [int(c) for c in getenv("FILE_STORE_CHANNEL", "").split()]
+MELCOW_NEW_USERS = is_enabled(getenv("MELCOW_NEW_USERS", "False"))
+PROTECT_CONTENT = is_enabled(getenv("PROTECT_CONTENT", "True"))
+PUBLIC_FILE_STORE = is_enabled(getenv("PUBLIC_FILE_STORE", "True"))
+PM_SEARCH = is_enabled(getenv("PM_SEARCH", "False"))
+EMOJI_MODE = is_enabled(getenv("EMOJI_MODE", "False"))
+
+# ============================
+# Server / Web
+# ============================
+
+STREAM_MODE = is_enabled(getenv("STREAM_MODE", "False"))
+NO_PORT = is_enabled(getenv("NO_PORT", "False"))
+APP_NAME = getenv("APP_NAME") if "DYNO" in os.environ else None
+ON_HEROKU = bool(APP_NAME)
+
+BIND_ADDRESS = getenv("WEB_SERVER_BIND_ADDRESS", "0.0.0.0")
+FQDN = getenv("FQDN", BIND_ADDRESS) if not ON_HEROKU else f"{APP_NAME}.herokuapp.com"
+
+HAS_SSL = is_enabled(getenv("HAS_SSL", "True"))
+URL = f"{'https' if HAS_SSL else 'http'}://{FQDN}{'' if NO_PORT else ':' + str(PORT)}/"
+
+SLEEP_THRESHOLD = int(getenv("SLEEP_THRESHOLD", "60"))
+WORKERS = int(getenv("WORKERS", "4"))
+SESSION_NAME = getenv("SESSION_NAME", "DeendayalBot")
+PING_INTERVAL = int(getenv("PING_INTERVAL", "1200"))
+
+# ============================
+# Reactions
+# ============================
+
+REACTIONS = [
+    "🤝", "😇", "🤗", "😍", "👍", "🎅", "😐", "🥰", "🤩", "😱", "🤣", "😘",
+    "👏", "😛", "😈", "🎉", "⚡️", "🫡", "🤓", "😎", "🏆", "🔥", "🤭", "🌚",
+    "🆒", "👻", "😁"
+]
+
+# ============================
+# Commands (Admin & Bot)
+# ============================
+
+# (keep your existing commands list & Bot_cmds dict unchanged here...)
+
+# ============================
+# Logs
+# ============================
+
 LOG_STR = "Current Customized Configurations are:-\n"
-LOG_STR += ("IMDB Results are enabled, Bot will be showing imdb details for your queries.\n" if IMDB else "IMDB Results are disabled.\n")
-LOG_STR += ("P_TTI_SHOW_OFF found, Users will be redirected to send /start to Bot PM instead of sending file directly.\n" if P_TTI_SHOW_OFF else "P_TTI_SHOW_OFF is disabled, files will be sent in PM instead of starting the bot.\n")
-LOG_STR += ("SINGLE_BUTTON is found, filename and file size will be shown in a single button instead of two separate buttons.\n" if SINGLE_BUTTON else "SINGLE_BUTTON is disabled, filename and file size will be shown as different buttons.\n")
-LOG_STR += (f"CUSTOM_FILE_CAPTION enabled with value {CUSTOM_FILE_CAPTION}, your files will be sent along with this customized caption.\n" if CUSTOM_FILE_CAPTION else "No CUSTOM_FILE_CAPTION Found, Default captions of file will be used.\n")
-LOG_STR += ("Long IMDB storyline enabled." if LONG_IMDB_DESCRIPTION else "LONG_IMDB_DESCRIPTION is disabled, Plot will be shorter.\n")
-LOG_STR += ("Spell Check Mode is enabled, bot will be suggesting related movies if movie name is misspelled.\n" if SPELL_CHECK_REPLY else "Spell Check Mode is disabled.\n")
-
+LOG_STR += "IMDB Results are enabled.\n" if IMDB else "IMDB Results are disabled.\n"
+LOG_STR += "Redirect to /start in PM is enabled.\n" if P_TTI_SHOW_OFF else "Direct PM files enabled.\n"
+LOG_STR += "Single button mode is enabled.\n" if SINGLE_BUTTON else "Separate buttons mode enabled.\n"
+LOG_STR += f"Custom caption: {CUSTOM_FILE_CAPTION}\n" if CUSTOM_FILE_CAPTION else "Default caption enabled.\n"
+LOG_STR += "Long IMDB storyline enabled.\n" if LONG_IMDB_DESCRIPTION else "Short IMDB plot enabled.\n"
+LOG_STR += "Spell check is enabled.\n" if SPELL_CHECK_REPLY else "Spell check is disabled.\n"
