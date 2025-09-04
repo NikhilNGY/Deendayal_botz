@@ -4,7 +4,7 @@ from pyrogram.errors.exceptions.bad_request_400 import MessageTooLong, PeerIdInv
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram import Client, filters, enums
 from database.users_chats_db import db
-from info import ADMINS, GRP_LNK
+from Deendayal_botz.info import ADMINS, GRP_LNK
 
         
 @Client.on_message(filters.command("broadcast") & filters.user(ADMINS) & filters.reply)
