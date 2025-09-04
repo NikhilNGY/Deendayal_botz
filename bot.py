@@ -16,7 +16,7 @@ from database.ia_filterdb import Media, Media2, choose_mediaDB, tempDict, db as 
 from database.users_chats_db import db
 from info import *
 from utils import temp
-from Script import script
+from script import script
 from plugins import web_server, check_expired_premium
 from Deendayal_botz.Bot import DeendayalBot
 from Deendayal_botz.util.keepalive import ping_server
