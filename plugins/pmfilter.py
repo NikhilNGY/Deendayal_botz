@@ -1679,14 +1679,13 @@ async def cb_handler(client: Client, query: CallbackQuery):
 
     elif query.data == "start":
         buttons = [[
-                    InlineKeyboardButton('🔰 ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ 🔰', url=f'http://telegram.me/{temp.U_NAME}?startgroup=true')
-                ],[
-                    InlineKeyboardButton('ᴛᴏᴘ sᴇᴀʀᴄʜɪɴɢ ⭐', callback_data="topsearch"),
-                    InlineKeyboardButton(' ʜᴇʟᴘ 📢', callback_data='help'),
-                ],[
-                    InlineKeyboardButton(' ᴀʙᴏᴜᴛ 📖', callback_data='about'),
-                    InlineKeyboardButton('ᴇᴀʀɴ ᴍᴏɴᴇʏ..💵', callback_data="shortlink_info")
-                ]]
+                    InlineKeyboardButton('• Bᴀᴄᴋᴜᴘ Cʜᴀɴɴᴇʟ •', url=f'https://t.me/sandalwood_kannada_moviesz')
+            ],[
+                InlineKeyboardButton('• Mᴏᴠɪᴇ Gʀᴏᴜᴘ •', url=f'https://t.me/+x6OfRDdUPrUwZTZl'),
+                InlineKeyboardButton('• Mᴀɪɴ Cʜᴀɴɴᴇʟ •', url=f'https://t.me/+fDkIGNmk5BU5ODVl')
+            ],[
+                InlineKeyboardButton('• Aʙᴏᴜᴛ •', callback_data='about')
+            ]]
         reply_markup = InlineKeyboardMarkup(buttons)
         current_time = datetime.now(pytz.timezone(TIMEZONE))
         curr_time = current_time.hour        
@@ -1750,7 +1749,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         await client.edit_message_media(
             query.message.chat.id, 
             query.message.id, 
-            InputMediaPhoto('https://graph.org/file/99eebf5dbe8a134f548e0.jpg')
+            InputMediaPhoto('https://envs.sh/t3L.jpg')
         )
         await query.message.edit_text(
             text=script.DHAKAD_DONATION.format(query.from_user.mention, QR_CODE, OWNER_UPI_ID),
@@ -1769,7 +1768,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         await client.edit_message_media(
             query.message.chat.id, 
             query.message.id, 
-            InputMediaPhoto("https://graph.org/file/7519d226226bec1090db7.jpg")
+            InputMediaPhoto("https://envs.sh/t3L.jpg")
         )
         await query.message.edit_text(
             text=script.UPI_TXT.format(query.from_user.mention, OWNER_UPI_ID),
@@ -1787,7 +1786,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         await client.edit_message_media(
             query.message.chat.id, 
             query.message.id, 
-            InputMediaPhoto("https://graph.org/file/7519d226226bec1090db7.jpg")
+            InputMediaPhoto("https://envs.sh/t3L.jpg")
         )
         await query.message.edit_text(
             text=script.QR_TXT.format(query.from_user.mention, QR_CODE),
@@ -1858,7 +1857,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         await client.edit_message_media(
             query.message.chat.id, 
             query.message.id, 
-            InputMediaPhoto("https://graph.org/file/7519d226226bec1090db7.jpg")
+            InputMediaPhoto("https://envs.sh/t3L.jpg")
         )
         await query.message.edit_text(
             text=script.PLAN_TXT.format(query.from_user.mention),
@@ -1897,7 +1896,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         await client.edit_message_media(
             query.message.chat.id, 
             query.message.id, 
-            InputMediaPhoto("https://graph.org/file/670f6df9f755dc2c9a00a.jpg")
+            InputMediaPhoto("https://envs.sh/t3L.jpg")
         )
         await query.message.edit_text(
             text=script.BRONZE_TXT.format(query.from_user.mention),
@@ -1919,7 +1918,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         await client.edit_message_media(
             query.message.chat.id, 
             query.message.id, 
-            InputMediaPhoto("https://graph.org/file/670f6df9f755dc2c9a00a.jpg")
+            InputMediaPhoto("https://envs.sh/t3L.jpg")
         )
         await query.message.edit_text(
             text=script.SILVER_TXT.format(query.from_user.mention),
@@ -1941,7 +1940,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         await client.edit_message_media(
             query.message.chat.id, 
             query.message.id, 
-            InputMediaPhoto("https://graph.org/file/670f6df9f755dc2c9a00a.jpg")
+            InputMediaPhoto("https://envs.sh/t3L.jpg")
         )
         await query.message.edit_text(
             text=script.GOLD_TXT.format(query.from_user.mention),
@@ -1963,7 +1962,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         await client.edit_message_media(
             query.message.chat.id, 
             query.message.id, 
-            InputMediaPhoto("https://graph.org/file/670f6df9f755dc2c9a00a.jpg")
+            InputMediaPhoto("https://envs.sh/t3L.jpg")
         )
         await query.message.edit_text(
             text=script.PLATINUM_TXT.format(query.from_user.mention),
@@ -2002,7 +2001,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         await client.edit_message_media(
             query.message.chat.id, 
             query.message.id, 
-            InputMediaPhoto("https://graph.org/file/670f6df9f755dc2c9a00a.jpg")
+            InputMediaPhoto("https://envs.sh/t3L.jpg")
         )
         await query.message.edit_text(
             text=script.OTHER_TXT.format(query.from_user.mention),
@@ -2139,7 +2138,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         
     elif query.data == "source":
         buttons = [[
-            InlineKeyboardButton('Sᴏᴜʀᴄᴇ Cᴏᴅᴇ 📜', url='https://github.com/Deendayal403/Deendayal_dhakad.git'),
+            InlineKeyboardButton('UPDATE CHANNEL', url='https://t.me/KR_PICTURE'),
             InlineKeyboardButton('⇋ ʙᴀᴄᴋ ⇋', callback_data='about')
         ]]
         reply_markup = InlineKeyboardMarkup(buttons)
