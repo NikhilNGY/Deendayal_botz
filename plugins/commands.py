@@ -9,7 +9,7 @@ import time
 import pytz
 from database.verify_db import vr_db
 from .pmfilter import auto_filter 
-from Script import script
+from script import script
 from datetime import datetime
 from database.refer import referdb
 from database.config_db import mdb
