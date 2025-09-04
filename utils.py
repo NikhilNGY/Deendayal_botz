@@ -7,7 +7,7 @@ from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
 from pyrogram.errors import FloodWait, UserIsBlocked, MessageNotModified, PeerIdInvalid
 from pyrogram import enums
 from typing import Union
-from Script import script
+from script import script
 import pytz
 import random 
 import re
