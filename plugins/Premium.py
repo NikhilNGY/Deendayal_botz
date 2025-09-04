@@ -2,7 +2,7 @@
 from datetime import timedelta
 import pytz
 import datetime, time
-from Script import script 
+from script import script 
 from info import ADMINS, PREMIUM_LOGS,LOG_CHANNEL
 from utils import get_seconds, temp
 from database.users_chats_db import db 
