@@ -43,7 +43,7 @@ async def gen_link_batch(bot, message):
         return await message.reply("Use correct format.\nExample <code>/batch https://t.me/HP_MOVIES_WORLD/10 https://t.me/HP_MOVIES_WORLD/20</code>.")
     links = message.text.strip().split(" ")
     if len(links) != 3:
-        return await message.reply("Use correct format.\nExample <code>/batch https://t.me/All_Movies_Studio/10 https://t.me/All_Movies_Studio/20</code>.")
+        return await message.reply("Use correct format.\nExample <code>/batch https://t.me/KR_PICTURE/10 https://t.me/KR_PICTURE/20</code>.")
     cmd, first, last = links
     regex = re.compile(r"(https://)?(t\.me/|telegram\.me/|telegram\.dog/)(c/)?(\d+|[a-zA-Z_0-9]+)/(\d+)$")
     match = regex.match(first)
