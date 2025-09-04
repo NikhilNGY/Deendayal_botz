@@ -76,6 +76,12 @@ MULTI_FSUB = [int(ch) for ch in getenv("MULTI_FSUB", "").split() if id_pattern.m
 QR_CODE = getenv("QR_CODE", "https://envs.sh/t3L.jpg")
 OWNER_UPI_ID = getenv("OWNER_UPI_ID", "xyz@123")
 
+
+# Multi-client setup
+parser = TokenParser()
+MULTI_CLIENT = parser.parse_from_env()  # {1: "token1", 2: "token2", ...}
+
+
 # ============================
 # MongoDB
 # ============================
