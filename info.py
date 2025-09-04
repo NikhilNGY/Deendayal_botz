@@ -84,7 +84,7 @@ HOW_TO_VERIFY = environ.get('HOW_TO_VERIFY', 'https://t.me/how_to_opan_linkz/6')
 # ============================
 # Link Shortener Configuration
 # ============================
-IS_SHORTLINK = bool(environ.get('IS_SHORTLINK', True))
+IS_SHORTLINK = bool(environ.get('IS_SHORTLINK', False))
 SHORTLINK_URL = environ.get('SHORTLINK_URL', 'vplink.in")
 SHORTLINK_API = environ.get('SHORTLINK_API', 'ab42d0b5656f5c774f800dacb6739342b6f094aa')
 TUTORIAL = environ.get('TUTORIAL', 'https://t.me/how_to_opan_linkz/6')  # Tutorial video link for opening shortlink website
