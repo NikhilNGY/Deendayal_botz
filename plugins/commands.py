@@ -179,9 +179,7 @@ async def start(client, message):
                 kk, file_id = message.command[1].split("_", 1)
                 btn.append([InlineKeyboardButton("♻️ ᴛʀʏ ᴀɢᴀɪɴ ♻️", callback_data=f"checksub#{kk}#{file_id}")])
                 reply_markup = InlineKeyboardMarkup(btn)
-                caption = (
-f"<b><blockquote>ನಮಸ್ಕಾರ 🙏  ,\n \nಚಲನಚಿತ್ರವನ್ನು ಪಡೆಯಲು "JOIN CHANNEL" ಬಟನ್ ಕ್ಲಿಕ್ ಮಾಡಿ ಮತ್ತು ಚಾನಲ್‌ನಲ್ಲಿ ಸೇರಿಕೊಳ್ಳಿ.\n \n────── • ◆ • ──────\n \nYou Need to Join My Channel to Receive the Movie file. CLICK 👇👇</blockquote></b>"
-)
+                caption = (f'<b><blockquote>ನಮಸ್ಕಾರ 🙏  ,\n \nಚಲನಚಿತ್ರವನ್ನು ಪಡೆಯಲು "JOIN CHANNEL" ಬಟನ್ ಕ್ಲಿಕ್ ಮಾಡಿ ಮತ್ತು ಚಾನಲ್‌ನಲ್ಲಿ ಸೇರಿಕೊಳ್ಳಿ.\n \n────── • ◆ • ──────\n \nYou Need to Join My Channel to Receive the Movie file. CLICK 👇👇</blockquote></b>')
                 await message.reply_photo(
                     photo=random.choice(FSUB_PICS),
                     caption=caption,
