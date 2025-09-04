@@ -1,33 +1,83 @@
-# Byte-compiled / cache files
+# -------------------------
+# Python
+# -------------------------
 __pycache__/
 *.py[cod]
 *.pyo
 
+# Bytecode / cache
+*.egg-info/
+*.egg
+*.manifest
+*.spec
+
+# -------------------------
 # Logs
+# -------------------------
 *.log
+logs/
+*.out
+*.err
 
-# Virtual environment
+# -------------------------
+# Virtual environments
+# -------------------------
 .venv/
-env/
 venv/
+env/
+ENV/
+.venv*/
 
+# -------------------------
 # System files
+# -------------------------
 .DS_Store
 Thumbs.db
 
-# IDE settings
+# -------------------------
+# IDE / Editor settings
+# -------------------------
 .vscode/
 .idea/
+*.swp
+*.swo
 
-# Pytest / coverage
+# -------------------------
+# Testing / Coverage
+# -------------------------
 .pytest_cache/
 .coverage
+.coverage.*
 htmlcov/
+.tox/
+.mypy_cache/
 
-# Koyeb / Render / Heroku build cache
+# -------------------------
+# Databases / cache
+# -------------------------
 *.sqlite3
 *.db
 
-# Secrets (keep your env variables out of git!)
+# -------------------------
+# Deployment / Build cache
+# -------------------------
+build/
+dist/
+*.egg-info/
+*.bak
+
+# -------------------------
+# Secrets / Config
+# -------------------------
 .env
+.env.*
 config.json
+settings.json
+
+# -------------------------
+# Keep database folder but ignore files inside (if needed)
+# -------------------------
+# Uncomment below if you want to keep folder but not contents
+# Deendayal_botz/database/*
+# !Deendayal_botz/database/__init__.py
+# !Deendayal_botz/database/ia_filterdb.py
