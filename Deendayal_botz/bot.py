@@ -20,13 +20,29 @@ from pyrogram import __version__ as PYROGRAM_VERSION
 from pyrogram.raw.all import layer as PYRO_LAYER
 from pyrogram import idle
 
-# project imports (keep these the same as in your project)
-from ia_filterdb import Media, Media2, choose_mediaDB, tempDict, db as clientDB
-from Deendayal_botz.info import CAPTION_LANGUAGES, DATABASE_URI 
-from database.users_chats_db import db
-from utils import temp
-from script import script
-from plugins import web_server, check_expired_premium
+# -------------------------
+# Project imports
+# -------------------------
+from Deendayal_botz.database.ia_filterdb import (
+    Media,
+    Media2,
+    choose_mediaDB,
+    tempDict,
+    db as clientDB,
+)
+from Deendayal_botz.database.users_chats_db import db
+from Deendayal_botz.info import (
+    CAPTION_LANGUAGES,
+    DATABASE_URI,
+    DATABASE_URI2,
+    LOG_CHANNEL,
+    LOG_STR,
+    PORT,
+    ON_HEROKU,
+)
+from Deendayal_botz.utils import temp
+from Deendayal_botz import script
+from Deendayal_botz.plugins import web_server, check_expired_premium
 from Deendayal_botz.Bot import DeendayalBot
 from Deendayal_botz.util.keepalive import ping_server
 from Deendayal_botz.Bot.clients import initialize_clients
@@ -48,12 +64,14 @@ logger = logging.getLogger(__name__)
 botStartTime = _time.time()
 PLUGINS_GLOB = "plugins/*.py"
 
+
 # -------------------------
 # Helper functions
 # -------------------------
 def discover_plugin_paths(pattern: str):
     """Return list of plugin file paths matching pattern."""
     return [Path(p) for p in glob.glob(pattern) if Path(p).is_file()]
+
 
 def import_plugin_from_path(path: Path):
     """Dynamically import a plugin module given a Path and register it under plugins.<stem>."""
@@ -68,6 +86,7 @@ def import_plugin_from_path(path: Path):
     except Exception as exc:
         logger.exception(f"Failed to load plugin {path}: {exc}")
         return None
+
 
 # -------------------------
 # Main startup coroutine
@@ -128,7 +147,10 @@ async def Deendayal_start():
         free_dbSize = round(512 - (data_mb + index_mb), 2)
         if DATABASE_URI2 and free_dbSize < 62:
             tempDict["indexDB"] = DATABASE_URI2
-            logger.info("Primary DB low on space (%.2f MB). Using secondary DB for new indexes.", free_dbSize)
+            logger.info(
+                "Primary DB low on space (%.2f MB). Using secondary DB for new indexes.",
+                free_dbSize,
+            )
         elif not DATABASE_URI2:
             logger.error("Missing second DB URI (DATABASE_URI2). Exiting.")
             await DeendayalBot.stop()
@@ -156,7 +178,13 @@ async def Deendayal_start():
     except Exception:
         logger.exception("Failed to schedule check_expired_premium task")
 
-    logger.info("%s with Pyrogram v%s (Layer %s) started on %s.", me.first_name, PYROGRAM_VERSION, PYRO_LAYER, DeendayalBot.username)
+    logger.info(
+        "%s with Pyrogram v%s (Layer %s) started on %s.",
+        me.first_name,
+        PYROGRAM_VERSION,
+        PYRO_LAYER,
+        DeendayalBot.username,
+    )
     logger.info(LOG_STR)
     logger.info(script.LOGO)
 
@@ -166,7 +194,10 @@ async def Deendayal_start():
         today = date.today()
         now = datetime.now(tz)
         time_str = now.strftime("%H:%M:%S %p")
-        await DeendayalBot.send_message(chat_id=LOG_CHANNEL, text=script.RESTART_TXT.format(temp.B_LINK, today, time_str))
+        await DeendayalBot.send_message(
+            chat_id=LOG_CHANNEL,
+            text=script.RESTART_TXT.format(temp.B_LINK, today, time_str),
+        )
     except Exception:
         logger.exception("Failed to send restart message to LOG_CHANNEL")
 
@@ -192,6 +223,7 @@ async def Deendayal_start():
         except Exception:
             logger.exception("Error while stopping DeendayalBot")
 
+
 # -------------------------
 # Entrypoint
 # -------------------------
@@ -209,7 +241,9 @@ if __name__ == "__main__":
         for task in pending:
             task.cancel()
         try:
-            loop.run_until_complete(asyncio.gather(*pending, return_exceptions=True))
+            loop.run_until_complete(
+                asyncio.gather(*pending, return_exceptions=True)
+            )
         except Exception:
             pass
         loop.close()
