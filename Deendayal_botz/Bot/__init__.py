@@ -5,7 +5,7 @@ from typing import Union, Optional, AsyncGenerator
 from aiohttp import web
 from pyrogram import Client, types
 
-from database.ia_filterdb import Media
+from Deendayal_botz.database.ia_filterdb import Media
 from Deendayal_botz.info import *
 from utils import temp
 
