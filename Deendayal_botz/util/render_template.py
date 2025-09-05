@@ -1,7 +1,7 @@
 #Thanks @dreamcinezone for helping in this journey 
 
 import jinja2
-from info import *
+from Deendayal_botz.info import *
 from Deendayal_botz.Bot import DeendayalBot
 from Deendayal_botz.util.human_readable import humanbytes
 from Deendayal_botz.util.file_properties import get_file_ids
