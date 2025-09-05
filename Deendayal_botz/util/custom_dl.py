@@ -9,7 +9,7 @@ from pyrogram import Client, utils, raw
 from .file_properties import get_file_ids
 from pyrogram.session import Session, Auth
 from pyrogram.errors import AuthBytesInvalid
-from Deendayal_botz.server.exceptions import FIleNotFound
+from Deendayal_botz.server.exceptions import FileNotFound
 from pyrogram.file_id import FileId, FileType, ThumbnailSource
 
 
