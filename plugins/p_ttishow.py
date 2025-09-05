@@ -1,9 +1,9 @@
 from pyrogram import Client, filters, enums
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from pyrogram.errors import MessageTooLong, PeerIdInvalid, ChatAdminRequired
-from Deendayal_botz.info import ADMINS, LOG_CHANNEL, OWNER_LNK, MELCOW_VID
-from database.users_chats_db import db, db2
-from database.ia_filterdb import Media, Media2
+from Deendayal_botz.Deendayal_botz.info import ADMINS, LOG_CHANNEL, OWNER_LNK, MELCOW_VID
+from Deendayal_botz.database.users_chats_db import db, db2
+from Deendayal_botz.database.ia_filterdb import Media, Media2
 from utils import get_size, temp, get_settings, get_readable_time
 from Deendayal_botz.script import script
 import asyncio
