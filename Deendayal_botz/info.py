@@ -2,6 +2,7 @@ import os
 import re
 from os import getenv
 from Deendayal_botz.script import script
+from Deendayal_botz.token_parser import TokenParser
 
 # ============================
 # Utility Functions
@@ -80,6 +81,8 @@ OWNER_UPI_ID = getenv("OWNER_UPI_ID", "xyz@123")
 # Multi-client Setup (Single Bot)
 # ============================
 
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+parser = TokenParser(BOT_TOKEN)
 MULTI_CLIENT = {1: BOT_TOKEN}
 
 # ============================
