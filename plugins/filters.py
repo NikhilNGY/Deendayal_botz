@@ -3,8 +3,8 @@ import io
 from pyrogram import Client, filters, enums
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-from database.filters_mdb import add_filter, get_filters, delete_filter, count_filters
-from database.connections_mdb import active_connection
+from Deendayal_botz.database.filters_mdb import add_filter, get_filters, delete_filter, count_filters
+from Deendayal_botz.database.connections_mdb import active_connection
 from utils import get_file_id, parser, split_quotes
 from Deendayal_botz.info import ADMINS
 
