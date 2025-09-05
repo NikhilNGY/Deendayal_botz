@@ -3,7 +3,7 @@ import asyncio
 import logging
 import aiohttp
 import traceback
-from info import *
+from Deendayal_botz.info import *
 
 async def ping_server():
     sleep_time = PING_INTERVAL
