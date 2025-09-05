@@ -1,9 +1,7 @@
 import os
 import re
 from os import getenv
-from pyrogram.parser import TokenParser
 from Deendayal_botz.script import script
-from Deendayal_botz.token_parser import TokenParser
 
 # ============================
 # Utility Functions
@@ -78,13 +76,11 @@ MULTI_FSUB = [int(ch) for ch in getenv("MULTI_FSUB", "").split() if id_pattern.m
 QR_CODE = getenv("QR_CODE", "https://envs.sh/t3L.jpg")
 OWNER_UPI_ID = getenv("OWNER_UPI_ID", "xyz@123")
 
+# ============================
+# Multi-client Setup (Single Bot)
+# ============================
 
-# Multi-client setup
-
-BOT_TOKEN = os.getenv("BOT_TOKEN")
-parser = TokenParser(BOT_TOKEN)
-MULTI_CLIENT = {1: BOT_TOKEN}  # single-client setup
-
+MULTI_CLIENT = {1: BOT_TOKEN}
 
 # ============================
 # MongoDB
@@ -205,12 +201,6 @@ REACTIONS = [
     "👏", "😛", "😈", "🎉", "⚡️", "🫡", "🤓", "😎", "🏆", "🔥", "🤭", "🌚",
     "🆒", "👻", "😁"
 ]
-
-# ============================
-# Commands (Admin & Bot)
-# ============================
-
-# (keep your existing commands list & Bot_cmds dict unchanged here...)
 
 # ============================
 # Logs
