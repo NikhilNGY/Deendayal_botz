@@ -6,7 +6,7 @@ from aiohttp import web
 from pyrogram import Client, types
 
 from database.ia_filterdb import Media
-from info import *
+from Deendayal_botz.info import *
 from utils import temp
 
 # ==============================
