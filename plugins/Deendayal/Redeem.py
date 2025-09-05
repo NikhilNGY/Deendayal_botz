@@ -5,8 +5,8 @@ import string
 import random
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from database.users_chats_db import db
-from info import ADMINS, PREMIUM_LOGS
+from Deendayal_botz.database.users_chats_db import db
+from Deendayal_botz.info import ADMINS, PREMIUM_LOGS
 from utils import get_seconds, temp
 
 REDEEM_CODE = {}
