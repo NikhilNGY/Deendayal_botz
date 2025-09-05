@@ -1,7 +1,7 @@
 from pyrogram import *
 from pyrogram.errors import MessageNotModified
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
-from database.verify_db import vr_db 
+from Deendayal_botz.database.verify_db import vr_db 
 from Deendayal_botz.info import ADMINS
 from datetime import datetime
 
