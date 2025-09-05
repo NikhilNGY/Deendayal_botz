@@ -6,12 +6,12 @@ import random
 import pytz
 from datetime import datetime, timedelta, date, time
 lock = asyncio.Lock()
-from database.users_chats_db import db
-from database.refer import referdb
+from Deendayal_botz.database.users_chats_db import db
+from Deendayal_botz.database.refer import referdb
 from pyrogram.errors.exceptions.bad_request_400 import MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
-from script import script
+from Deendayal_botz.script import script
 import pyrogram
-from database.connections_mdb import active_connection, all_connections, delete_connection, if_active, make_active, \
+from Deendayal_botz.database.connections_mdb import active_connection, all_connections, delete_connection, if_active, make_active, \
     make_inactive
 from Deendayal_botz.info import *
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery, InputMediaPhoto, WebAppInfo
@@ -19,15 +19,15 @@ from pyrogram import Client, filters, enums
 from pyrogram.errors import FloodWait, UserIsBlocked, MessageNotModified, PeerIdInvalid
 from utils import get_size, is_subscribed, get_poster, search_gagala, temp, get_settings, save_group_settings, get_shortlink, get_tutorial, send_all, get_cap, imdb
 from fuzzywuzzy import process
-from database.users_chats_db import db
-from database.config_db import mdb
-from database.ia_filterdb import Media, Media2, get_file_details, get_search_results, get_bad_files
-from database.filters_mdb import (
+from Deendayal_botz.database.users_chats_db import db
+from Deendayal_botz.database.config_db import mdb
+from Deendayal_botz.database.ia_filterdb import Media, Media2, get_file_details, get_search_results, get_bad_files
+from Deendayal_botz.database.filters_mdb import (
     del_all,
     find_filter,
     get_filters,
 )
-from database.gfilters_mdb import (
+from Deendayal_botz.database.gfilters_mdb import (
     find_gfilter,
     get_gfilters,
     del_allg
@@ -35,7 +35,7 @@ from database.gfilters_mdb import (
 import logging
 from urllib.parse import quote_plus
 from Deendayal_botz.util.file_properties import get_name, get_hash, get_media_file_size
-from database.config_db import mdb
+from Deendayal_botz.database.config_db import mdb
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
 
