@@ -2,7 +2,7 @@
 
 from pyrogram import Client, filters, enums
 from pyrogram.types import ChatJoinRequest
-from database.users_chats_db import db
+from Deendayal_botz.database.users_chats_db import db
 from Deendayal_botz.info import ADMINS, AUTH_CHANNEL
 
 @Client.on_chat_join_request(filters.chat(AUTH_CHANNEL))
