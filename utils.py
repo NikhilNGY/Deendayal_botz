@@ -15,7 +15,7 @@ import os
 from datetime import datetime, date, time, timedelta
 import string
 from typing import List
-from Deendayal_botz.database.users_chats_db import db
+from database.users_chats_db import db
 from bs4 import BeautifulSoup
 import requests
 import aiohttp
@@ -41,7 +41,7 @@ START_CHAR = ('\'', '"', SMART_OPEN)
 
 
 class temp(object):
-   
+
     BANNED_USERS = []
     BANNED_CHATS = []
     ME = None
@@ -93,7 +93,7 @@ async def is_check_admin(bot, chat_id, user_id):
         return member.status in [enums.ChatMemberStatus.ADMINISTRATOR, enums.ChatMemberStatus.OWNER]
     except:
         return False
-    
+
 async def get_status(bot_id):
     try:
         return await db.movie_update_status(bot_id) or False  
@@ -101,7 +101,7 @@ async def get_status(bot_id):
         logging.error(f"Error in get_movie_update_status: {e}")
         return False  
 
-    
+
 async def get_poster(query, bulk=False, id=False, file=None):
     if not id:
         query = (query.strip()).lower()
@@ -219,7 +219,7 @@ async def broadcast_messages_group(chat_id, message):
         return await broadcast_messages_group(chat_id, message)
     except Exception as e:
         return False, "Error"
-    
+
 async def search_gagala(text):
     usr_agent = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
@@ -239,13 +239,13 @@ async def get_settings(group_id):
         settings = await db.get_settings(group_id)
         temp.SETTINGS[group_id] = settings
     return settings
-    
+
 async def save_group_settings(group_id, key, value):
     current = await get_settings(group_id)
     current[key] = value
     temp.SETTINGS[group_id] = current
     await db.update_settings(group_id, current)
-    
+
 def get_size(size):
     """Get size in readable format"""
 
@@ -291,7 +291,7 @@ def extract_user(message: Message) -> Union[int, str]:
             len(message.entities) > 1 and
             message.entities[1].type == enums.MessageEntityType.TEXT_MENTION
         ):
-           
+
             required_entity = message.entities[1]
             user_id = required_entity.user.id
             user_first_name = required_entity.user.first_name
@@ -530,7 +530,7 @@ async def get_shortlink(chat_id, link):
         #   "price": 0,
         #   "currency": "INR",
         #   "purchase_note":""
-        
+
         # })
         # headers = {
         #   'Keep-Alive': '',
@@ -560,7 +560,7 @@ async def get_shortlink(chat_id, link):
         shortzy = Shortzy(api_key=API, base_site=URL)
         link = await shortzy.convert(link)
         return link
-    
+
 async def get_tutorial(chat_id):
     settings = await get_settings(chat_id) #fetching settings for group
     if 'tutorial' in settings.keys():
@@ -571,7 +571,7 @@ async def get_tutorial(chat_id):
     else:
         TUTORIAL_URL = TUTORIAL
     return TUTORIAL_URL
-        
+
 async def get_verify_shorted_link(link):
     API = SHORTLINK_API
     URL = SHORTLINK_URL
@@ -651,7 +651,7 @@ async def get_verify_status(userid):
         status = await db.get_verified(userid)
         temp.VERIFY[userid] = status
     return status
-    
+
 async def update_verify_status(userid, date_temp, time_temp):
     status = await get_verify_status(userid)
     status["date"] = date_temp
@@ -676,7 +676,7 @@ async def check_verification(bot, userid):
     if not await db.is_user_exist(user.id):
         await db.add_user(user.id, user.first_name)
         await bot.send_message(LOG_CHANNEL, script.LOG_TEXT_P.format(user.id, user.mention))
-    
+
     tz = pytz.timezone('Asia/Kolkata')
     today = date.today()
     now = datetime.now(tz)
@@ -700,7 +700,7 @@ async def check_verification(bot, userid):
                 return True
         else:
             return True
-            
+
 async def get_seconds(time_string):
     def extract_value_and_unit(ts):
         value = ""
@@ -734,7 +734,7 @@ async def get_seconds(time_string):
         return value * 86400 * 365
     else:
         return 0
-    
+
 async def send_all(bot, userid, files, ident, chat_id, user_name, query):
     settings = await get_settings(chat_id)
     if 'is_shortlink' in settings.keys():
@@ -785,7 +785,7 @@ async def send_all(bot, userid, files, ident, chat_id, user_name, query):
         await query.answer('Hᴇʏ, Sᴛᴀʀᴛ Bᴏᴛ Fɪʀsᴛ Aɴᴅ Cʟɪᴄᴋ Sᴇɴᴅ Aʟʟ', show_alert=True)
     except Exception as e:
         await query.answer('Hᴇʏ, Sᴛᴀʀᴛ Bᴏᴛ Fɪʀsᴛ Aɴᴅ Cʟɪᴄᴋ Sᴇɴᴅ Aʟʟ', show_alert=True)
-        
+
 async def get_cap(settings, remaining_seconds, files, query, total_results, search):
     if settings["imdb"]:
         IMDB_CAP = temp.IMDB_CAP.get(query.from_user.id)
@@ -818,7 +818,7 @@ async def get_cap(settings, remaining_seconds, files, query, total_results, sear
                     producer=imdb["producer"],
                     composer=imdb["composer"],
                     cinematographer=imdb["cinematographer"],
-                    music_team=imdb["music_team"],
+                    music_team=imdb["music_department"],
                     distributors=imdb["distributors"],
                     release_date=imdb['release_date'],
                     year=imdb['year'],
@@ -864,8 +864,3 @@ def get_time(seconds):
             period_value, seconds = divmod(seconds, period_seconds)
             result += f'{int(period_value)}{period_name}'
     return result
-
-
-
-
-
