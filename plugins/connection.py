@@ -1,6 +1,6 @@
 from pyrogram import Client, filters, enums
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from database.connections_mdb import add_connection, all_connections, if_active, delete_connection
+from Deendayal_botz.database.connections_mdb import add_connection, all_connections, if_active, delete_connection
 from Deendayal_botz.info import ADMINS
 import logging
 
