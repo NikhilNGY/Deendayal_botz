@@ -3,7 +3,7 @@ from pyrogram.errors import InputUserDeactivated, UserNotParticipant, FloodWait,
 from pyrogram.errors.exceptions.bad_request_400 import MessageTooLong, PeerIdInvalid
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram import Client, filters, enums
-from database.users_chats_db import db
+from Deendayal_botz.database.users_chats_db import db
 from Deendayal_botz.info import ADMINS, GRP_LNK
 
         
