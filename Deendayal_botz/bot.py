@@ -40,8 +40,8 @@ from Deendayal_botz.info import (
     PORT,
     ON_HEROKU,
 )
-from Deendayal_botz.utils import temp
-from Deendayal_botz import script
+from utils import temp
+from Deendayal_botz.script import script
 from Deendayal_botz.plugins import web_server, check_expired_premium
 from Deendayal_botz.Bot import DeendayalBot
 from Deendayal_botz.util.keepalive import ping_server
