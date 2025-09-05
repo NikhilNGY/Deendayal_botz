@@ -1,7 +1,7 @@
 import os
 import re
 from os import getenv
-from script import script
+from Deendayal_botz.script import script
 from Deendayal_botz.token_parser import TokenParser
 
 # ============================
