@@ -1,5 +1,5 @@
 import pymongo
-from info import DATABASE_URI, DATABASE_NAME
+from Deendayal_botz.info import DATABASE_URI, DATABASE_NAME
 import logging
 
 logger = logging.getLogger(__name__)
