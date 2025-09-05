@@ -4,7 +4,7 @@ from typing import Any, Optional
 from pyrogram.types import Message
 from pyrogram.file_id import FileId
 from pyrogram.raw.types.messages import Messages
-from Deendayal_botz.server.exceptions import FIleNotFound
+from Deendayal_botz.server.exceptions import FileNotFound
 
 
 async def parse_file_id(message: "Message") -> Optional[FileId]:
