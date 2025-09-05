@@ -2,7 +2,7 @@ from os import environ
 from datetime import timedelta, datetime
 from pymongo import MongoClient
 import pytz
-from info import DATABASE_URI, DATABASE_NAME
+from Deendayal_botz.info import DATABASE_URI, DATABASE_NAME
 
 class VR_db:
     def __init__(self, db_url, db_name, timezone):
