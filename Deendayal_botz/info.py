@@ -1,6 +1,7 @@
 import os
 import re
 from os import getenv
+from pyrogram.parser import TokenParser
 from Deendayal_botz.script import script
 from Deendayal_botz.token_parser import TokenParser
 
@@ -79,8 +80,10 @@ OWNER_UPI_ID = getenv("OWNER_UPI_ID", "xyz@123")
 
 
 # Multi-client setup
-parser = TokenParser()
-MULTI_CLIENT = parser.parse_from_env()  # {1: "token1", 2: "token2", ...}
+
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+parser = TokenParser(BOT_TOKEN)
+MULTI_CLIENT = {1: BOT_TOKEN}  # single-client setup
 
 
 # ============================
