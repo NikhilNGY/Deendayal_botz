@@ -20,7 +20,7 @@ async def parse_file_unique_id(message: "Messages") -> Optional[str]:
 async def get_file_ids(client: Client, chat_id: int, id: int) -> Optional[FileId]:
     message = await client.get_messages(chat_id, id)
     if message.empty:
-        raise FIleNotFound
+        raise FileNotFound
     media = get_media_from_message(message)
     file_unique_id = await parse_file_unique_id(message)
     file_id = await parse_file_id(message)
