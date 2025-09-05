@@ -5,7 +5,7 @@ from Deendayal_botz.info import ADMINS, LOG_CHANNEL, OWNER_LNK, MELCOW_VID
 from database.users_chats_db import db, db2
 from database.ia_filterdb import Media, Media2
 from utils import get_size, temp, get_settings, get_readable_time
-from script import script
+from Deendayal_botz.script import script
 import asyncio
 import psutil
 import time
