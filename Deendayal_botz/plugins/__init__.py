@@ -3,7 +3,7 @@ from aiohttp import web
 from .route import routes
 from asyncio import sleep 
 from datetime import datetime
-from database.users_chats_db import db
+from Deendayal_botz.database.users_chats_db import db
 from Deendayal_botz.info import LOG_CHANNEL
 
 async def web_server():
