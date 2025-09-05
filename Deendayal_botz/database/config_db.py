@@ -1,5 +1,5 @@
 from motor.motor_asyncio import AsyncIOMotorClient
-from info import DATABASE_URI
+from Deendayal_botz.info import DATABASE_URI
 from datetime import datetime
 
 
