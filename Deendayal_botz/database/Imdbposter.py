@@ -3,7 +3,7 @@ import aiohttp
 import asyncio
 from io import BytesIO
 from PIL import Image
-from info import DEENDAYAL_IMAGE_FETCH
+from Deendayal_botz.info import DEENDAYAL_IMAGE_FETCH
 from imdb import Cinemagoer
 
 
