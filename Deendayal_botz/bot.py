@@ -4,6 +4,7 @@ main.py — starts the Deendayal bot, loads plugins, initializes clients, DBs an
 Rewritten for clarity, robustness and better error handling.
 """
 
+import os
 import sys
 import asyncio
 import glob
