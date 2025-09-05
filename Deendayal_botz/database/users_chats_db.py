@@ -3,7 +3,7 @@ from pymongo import MongoClient
 from pymongo.errors import DuplicateKeyError
 import datetime
 
-from info import (
+from Deendayal_botz.info import (
     DATABASE_NAME, DATABASE_URI, DATABASE_URI2,
     IMDB, IMDB_TEMPLATE, MELCOW_NEW_USERS, P_TTI_SHOW_OFF,
     SINGLE_BUTTON, SPELL_CHECK_REPLY, PROTECT_CONTENT,
