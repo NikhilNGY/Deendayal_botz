@@ -2,7 +2,7 @@ import re
 import logging
 from pyrogram import Client, filters
 from Deendayal_botz.info import DELETE_CHANNELS
-from database.ia_filterdb import Media, Media2, unpack_new_file_id
+from Deendayal_botz.database.ia_filterdb import Media, Media2, unpack_new_file_id
 
 logger = logging.getLogger(__name__)
 
