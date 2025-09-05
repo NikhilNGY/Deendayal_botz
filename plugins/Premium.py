@@ -5,7 +5,7 @@ import datetime, time
 from Deendayal_botz.script import script
 from Deendayal_botz.info import ADMINS, PREMIUM_LOGS,LOG_CHANNEL
 from utils import get_seconds, temp
-from database.users_chats_db import db 
+from Deendayal_botz.database.users_chats_db import db 
 import asyncio
 from pyrogram import Client, filters 
 from pyrogram.errors.exceptions.bad_request_400 import MessageTooLong
