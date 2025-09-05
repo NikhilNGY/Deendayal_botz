@@ -6,7 +6,7 @@ import os
 import shutil
 import logging
 from pyrogram.types import BotCommand
-from info import ADMINS, Bot_cmds
+from Deendayal_botz.info import ADMINS, Bot_cmds
 
 logging.basicConfig(level=logging.INFO)
 
