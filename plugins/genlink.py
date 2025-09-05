@@ -8,7 +8,7 @@ from pyrogram import Client, filters, enums, types
 from pyrogram.errors import ChannelInvalid, UsernameInvalid, UsernameNotModified
 
 from Deendayal_botz.info import ADMINS, LOG_CHANNEL, FILE_STORE_CHANNEL, PUBLIC_FILE_STORE
-from database.ia_filterdb import unpack_new_file_id
+from Deendayal_botz.database.ia_filterdb import unpack_new_file_id
 from utils import temp
 
 # ==============================
