@@ -2,7 +2,7 @@
 import math
 import asyncio
 import logging
-from info import *
+from Deendayal_botz.info import *
 from typing import Dict, Union
 from Deendayal_botz.Bot import work_loads
 from pyrogram import Client, utils, raw
