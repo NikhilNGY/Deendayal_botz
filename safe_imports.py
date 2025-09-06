@@ -1,8 +1,7 @@
 """
 Safe Import Wrapper
 
-This module ensures missing local imports (like `database`) won't crash the bot.
-Instead, it falls back to mock objects with warnings.
+Prevents crashes if local modules are missing.
 """
 
 import logging
@@ -16,8 +15,8 @@ def safe_import(module_name: str, fallback: dict = None):
     """
     try:
         module = __import__(module_name, fromlist=["*"])
-        logger.info(f"✅ Successfully imported {module_name}")
+        logger.info(f"✅ Imported {module_name}")
         return module
     except ModuleNotFoundError as e:
-        logger.warning(f"⚠️ Could not import {module_name}: {e}. Using fallback.")
+        logger.warning(f"⚠️ Missing {module_name}: {e}. Using fallback.")
         return SimpleNamespace(**(fallback or {}))
