@@ -1,3 +1,4 @@
+# Pyrogram & Telegram
 pyrofork==2.3.45
 tgcrypto
 
@@ -57,3 +58,7 @@ speedtest-cli
 # Timezones
 pytz
 dnspython==2.3.0
+
+# Pydantic v2+
+pydantic>=2.11
+pydantic-settings
