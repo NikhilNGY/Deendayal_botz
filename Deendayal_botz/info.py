@@ -30,7 +30,8 @@ BOT_TOKEN = environ.get('BOT_TOKEN', "")
 CACHE_TIME = int(environ.get('CACHE_TIME', 300))
 USE_CAPTION_FILTER = is_enabled(environ.get('USE_CAPTION_FILTER', "True"), True)
 INDEX_CAPTION = is_enabled(environ.get('SAVE_CAPTION', "True"), True)
-
+PM_SEARCH = bool(environ.get('PM_SEARCH', True))  # PM Search On (True) / Off (False)
+EMOJI_MODE = bool(environ.get('EMOJI_MODE', False))  # Emoji status On (True) / Off (False)
 PICS = (environ.get('PICS', 'https://envs.sh/t3L.jpg')).split()
 NOR_IMG = environ.get("NOR_IMG", "https://graph.org/file/e20b5fdaf217252964202.jpg")
 MELCOW_PHOTO = environ.get("MELCOW_PHOTO", "https://envs.sh/t3L.jpg")
@@ -43,9 +44,14 @@ FSUB_PICS = (environ.get('FSUB_PICS', 'https://graph.org/file/7478ff3eac37f4329c
 # IMDB Settings
 # ============================
 IMDB = is_enabled(environ.get('IMDB', "False"), False)
+LONG_IMDB_DESCRIPTION = is_enabled(environ.get("LONG_IMDB_DESCRIPTION", "False"), False)
+IMDB_TEMPLATE = environ.get("IMDB_TEMPLATE", f"{script.IMDB_TEMPLATE_TXT}")
+SPELL_CHECK_REPLY = is_enabled(environ.get("SPELL_CHECK_REPLY", "True"), True)
+MAX_LIST_ELM = environ.get("MAX_LIST_ELM", None)
 
 # Example default languages
 CAPTION_LANGUAGES = ["en", "hi", "kn"]  # English, Hindi, Kannada
+
 
 # ============================
 # Admin, Channels & Users Configuration
@@ -201,8 +207,10 @@ PLAN_COMMAND = environ.get("PLAN_COMMAND", "plans")
 # ============================
 # Bot Functionalities
 # ============================
+NO_RESULTS_MSG = bool(environ.get("NO_RESULTS_MSG", True))  # True if you want no results messages in Log Channel
 DELETE_TIME = int(environ.get('DELETE_TIME', 900))
 MAX_B_TN = int(environ.get("MAX_B_TN", "20"))
+MAX_BTN = is_enabled((environ.get('MAX_BTN', "True")), True)
 LANGUAGES = [lng.strip() for lng in environ.get("LANGUAGES", "en").split(",")]
 PM_SEARCH = is_enabled(environ.get("PM_SEARCH", "False"), False)
 AUTO_DELETE = is_enabled(environ.get("AUTO_DELETE", "True"), True)
@@ -213,6 +221,8 @@ PM_IMDB = is_enabled(environ.get("PM_IMDB", "False"), False)
 PM_FILTER = is_enabled(environ.get("PM_FILTER", "True"), True)
 PM_BUTTON = is_enabled(environ.get("PM_BUTTON", "True"), True)
 LOG_VR_CHANNEL = int(environ.get('LOG_VR_CHANNEL', '-100'))
+PORT = environ.get("PORT", "8080")
+MSG_ALRT = environ.get('MSG_ALRT', 'Share & Support Us ♥️')
 
 
 # ============================
@@ -229,7 +239,9 @@ BATCH_FILE_CAPTION = environ.get("BATCH_FILE_CAPTION", CUSTOM_FILE_CAPTION)
 # ============================
 BUTTON_MODE = environ.get("BUTTON_MODE", "single")  # default single
 BUTTON_MODE = BUTTON_MODE if BUTTON_MODE in ["single", "double"] else "single"
-
+INDEX_REQ_CHANNEL = int(environ.get('INDEX_REQ_CHANNEL', LOG_CHANNEL))
+FILE_STORE_CHANNEL = [int(ch) for ch in (environ.get('FILE_STORE_CHANNEL', '')).split()]
+MELCOW_NEW_USERS = is_enabled((environ.get('MELCOW_NEW_USERS', "False")), False)
 
 # ============================
 # Miscellaneous
