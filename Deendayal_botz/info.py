@@ -40,6 +40,11 @@ FSUB_PICS = (environ.get('FSUB_PICS', 'https://graph.org/file/7478ff3eac37f4329c
 
 
 # ============================
+# IMDB Settings
+# ============================
+IMDB = is_enabled(environ.get('IMDB', "False"), False)
+
+# ============================
 # Admin, Channels & Users Configuration
 # ============================
 ADMINS = [int(admin) if id_pattern.match(admin) else admin for admin in environ.get('ADMINS', '2068233407,2098589219').split(",")]
