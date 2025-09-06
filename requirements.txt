@@ -5,7 +5,7 @@ motor==3.7.0
 marshmallow==3.26.1
 umongo
 requests
-bs4
+beautifulsoup4
 git+https://github.com/Joelkb/cinemagoer
 shortzy
 datetime
@@ -14,12 +14,12 @@ aiohttp
 
 # Master tools
 PyLeaves==1.0.2
-Wikipedia
+wikipedia
 
 # Other tools
 opencv-python-headless==4.8.1.78
 python-dotenv==0.21.1
-speedtest
+speedtest-cli
 humanize==4.6.0
 Pillow==9.4.0
 psutil==5.9.4
@@ -27,7 +27,6 @@ numpy
 wheel
 ujson
 wget
-pytz
 aiofiles
 dnspython==2.3.0
 python-decouple
@@ -45,6 +44,6 @@ fuzzywuzzy
 python-Levenshtein
 
 # Additional Tools
-googletrans==3.1.0a0
+googletrans==4.0.0rc1
 telegraph==2.2.0
 gTTS==2.3.1
