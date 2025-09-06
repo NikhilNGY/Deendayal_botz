@@ -23,7 +23,8 @@ API_ID = int(environ.get('API_ID', '22525529'))
 API_HASH = environ.get('API_HASH', '840111f82bbd1d2d3de5055afccf6a92')
 BOT_TOKEN = environ.get('BOT_TOKEN', "")
 
-
+# Enable or disable multi-client support
+MULTI_CLIENT = False   # or True if you want multiple Pyrogram clients
 
 # ============================
 # Bot Settings Configuration
