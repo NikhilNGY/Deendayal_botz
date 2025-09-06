@@ -44,6 +44,9 @@ FSUB_PICS = (environ.get('FSUB_PICS', 'https://graph.org/file/7478ff3eac37f4329c
 # ============================
 IMDB = is_enabled(environ.get('IMDB', "False"), False)
 
+# Example default languages
+CAPTION_LANGUAGES = ["en", "hi", "kn"]  # English, Hindi, Kannada
+
 # ============================
 # Admin, Channels & Users Configuration
 # ============================
