@@ -68,7 +68,8 @@ SUPPORT_CHAT_ID = environ.get('SUPPORT_CHAT_ID', '-1002241869735')
 DEENDAYAL_MOVIE_UPDATE_CHANNEL = environ.get("DEENDAYAL_MOVIE_UPDATE_CHANNEL", "-1002129955308")
 REQST_CHANNEL = environ.get('REQST_CHANNEL_ID', '-1002071201127')
 SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'https://t.me/+sGC3kK3Q9L1kNDNl')
-
+GRP_LNK = environ.get('GRP_LNK', 'https://t.me/+sGC3kK3Q9L1kNDNl')
+CHNL_LNK = environ.get('CHNL_LNK', 'https://t.me/+fDkIGNmk5BU5ODVl')
 AUTH_CHANNEL = [int(fch) if id_pattern.match(fch) else fch for fch in environ.get('AUTH_CHANNEL', '-1001951277428').split()]
 MULTI_FSUB = [int(cid) for cid in environ.get('MULTI_FSUB', '-1002495956089').split() if id_pattern.match(cid)]
 
