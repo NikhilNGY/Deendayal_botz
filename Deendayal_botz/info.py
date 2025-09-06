@@ -198,13 +198,13 @@ PLAN_COMMAND = environ.get("PLAN_COMMAND", "plans")
 # ============================
 # Bot Functionalities
 # ============================
-DELETE_TIME = int(environ.get('DELETE_TIME', 600))
-MAX_BTN = int(environ.get("MAX_BTN", "20"))
+DELETE_TIME = int(environ.get('DELETE_TIME', 900))
+MAX_B_TN = int(environ.get("MAX_B_TN", "20"))
 LANGUAGES = [lng.strip() for lng in environ.get("LANGUAGES", "en").split(",")]
 PM_SEARCH = is_enabled(environ.get("PM_SEARCH", "False"), False)
 AUTO_DELETE = is_enabled(environ.get("AUTO_DELETE", "True"), True)
 WELCOME_DELETE = is_enabled(environ.get("WELCOME_DELETE", "True"), True)
-FILE_AUTO_DELETE = is_enabled(environ.get("FILE_AUTO_DELETE", "False"), False)
+FILE_AUTO_DELETE = is_enabled(environ.get("FILE_AUTO_DELETE", "True"), True)
 AUTO_FFILTER = is_enabled(environ.get("AUTO_FFILTER", "True"), True)
 PM_IMDB = is_enabled(environ.get("PM_IMDB", "False"), False)
 PM_FILTER = is_enabled(environ.get("PM_FILTER", "True"), True)
@@ -215,11 +215,11 @@ LOG_VR_CHANNEL = int(environ.get('LOG_VR_CHANNEL', '-100'))
 # ============================
 # File Settings
 # ============================
-CUSTOM_FILE_CAPTION = environ.get("CUSTOM_FILE_CAPTION", "")
 FILE_PROTECT = is_enabled(environ.get("FILE_PROTECT", "False"), False)
 PROTECT_CONTENT = is_enabled(environ.get("PROTECT_CONTENT", "False"), False)
-CUSTOM_CAPTION = environ.get("CUSTOM_CAPTION", "")
-
+SINGLE_BUTTON = is_enabled((environ.get('SINGLE_BUTTON', "False")), False) # pm & Group button or link mode (True) / Off (False)
+CUSTOM_FILE_CAPTION = environ.get("CUSTOM_FILE_CAPTION", f"{script.CAPTION}")
+BATCH_FILE_CAPTION = environ.get("BATCH_FILE_CAPTION", CUSTOM_FILE_CAPTION)
 
 # ============================
 # Filter Mode
