@@ -1,295 +1,130 @@
-#!/usr/bin/env python3
-"""
-Modern configuration management for Deendayal Bot.
-Fully compatible with Pydantic v2 / pydantic-settings.
-"""
-
 import re
-from enum import Enum
-from typing import List, Optional, Union
-from urllib.parse import urlparse
+from os import environ,getenv
+from Script import script 
 
-# Pydantic v2 imports
-from pydantic import Field, field_validator, model_validator, root_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+id_pattern = re.compile(r'^.\d+$')
+def is_enabled(value, default):
+    if value.lower() in ["true", "yes", "1", "enable", "y"]:
+        return True
+    elif value.lower() in ["false", "no", "0", "disable", "n"]:
+        return False
+    else:
+        return default
 
-from Deendayal_botz.script import script
-from Deendayal_botz.token_parser import TokenParser
+# Bot information
+SESSION = environ.get('SESSION', 'KR_PICTURE')
+API_ID = int(environ.get('API_ID', '22525529'))
+API_HASH = environ.get('API_HASH', '840111f82bbd1d2d3de5055afccf6a92')
+BOT_TOKEN = environ.get('BOT_TOKEN', "6065501510:AAHTTxh94rg3LKYhy762fEF9xlqiw5whsG0")
 
-# ============================
-# Constants and Patterns
-# ============================
+# Bot settings
+CACHE_TIME = int(environ.get('CACHE_TIME', 300))
+USE_CAPTION_FILTER = bool(environ.get('USE_CAPTION_FILTER', True))
 
-ID_PATTERN = re.compile(r'^-?\d+$')
+PICS = (environ.get('PICS', 'https://envs.sh/t3L.jpg')).split()  #SAMPLE PIC
+NOR_IMG = environ.get("NOR_IMG", "https://graph.org/file/e20b5fdaf217252964202.jpg")
+MELCOW_VID = environ.get("MELCOW_VID", "https://telegra.ph/file/f7f2a532fe4b990044507.mp4")
+SPELL_IMG = environ.get("SPELL_IMG", "https://te.legra.ph/file/15c1ad448dfe472a5cbb8.jpg")
 
-# ============================
-# Enums
-# ============================
+# Admins, Channels & Users
+ADMINS = [int(admin) if id_pattern.search(admin) else admin for admin in environ.get('ADMINS', '2068233407, 2098589219').split()]
+CHANNELS = [int(ch) if id_pattern.search(ch) else ch for ch in environ.get('CHANNELS', '-1001683081282').split()]
+auth_users = [int(user) if id_pattern.search(user) else user for user in environ.get('AUTH_USERS', '2068233407, 2098589219').split()]
+AUTH_USERS = (auth_users + ADMINS) if auth_users else []
+PREMIUM_USER = [int(user) if id_pattern.search(user) else user for user in environ.get('PREMIUM_USER', '').split()]
+auth_channel = environ.get('AUTH_CHANNEL')
+auth_grp = environ.get('AUTH_GROUP')
+AUTH_CHANNEL = int(auth_channel) if auth_channel and id_pattern.search(auth_channel) else None
+AUTH_GROUPS = [int(ch) for ch in auth_grp.split()] if auth_grp else None
+support_chat_id = environ.get('SUPPORT_CHAT_ID', '-1002241869735')
+reqst_channel = environ.get('REQST_CHANNEL_ID', '-1002617590596')
+REQST_CHANNEL = int(reqst_channel) if reqst_channel and id_pattern.search(reqst_channel) else None
+SUPPORT_CHAT_ID = int(support_chat_id) if support_chat_id and id_pattern.search(support_chat_id) else None
+NO_RESULTS_MSG = bool(environ.get("NO_RESULTS_MSG", True))
 
-class LogLevel(str, Enum):
-    DEBUG = "DEBUG"
-    INFO = "INFO"
-    WARNING = "WARNING"
-    ERROR = "ERROR"
-    CRITICAL = "CRITICAL"
+# MongoDB information
+DATABASE_URI = environ.get('DATABASE_URI', " ")
+DATABASE_NAME = environ.get('DATABASE_NAME', "Filter2")
+COLLECTION_NAME = environ.get('COLLECTION_NAME', 'KR_PICTURE')
 
-class Environment(str, Enum):
-    DEVELOPMENT = "development"
-    STAGING = "staging"
-    PRODUCTION = "production"
+# Others
+VERIFY = bool(environ.get('VERIFY', False))
+SHORTLINK_URL = environ.get('SHORTLINK_URL', 'vplink.in')
+SHORTLINK_API = environ.get('SHORTLINK_API', 'ab42d0b5656f5c774f800dacb6739342b6f094aa')
+IS_SHORTLINK = bool(environ.get('IS_SHORTLINK', "True"))
+DELETE_CHANNELS = [int(dch) if id_pattern.search(dch) else dch for dch in environ.get('DELETE_CHANNELS', '-1001396923650').split()]
+MAX_B_TN = environ.get("MAX_B_TN", "5")
+MAX_BTN = is_enabled((environ.get('MAX_BTN', "True")), True)
+PORT = environ.get("PORT", "8080")
+GRP_LNK = environ.get('GRP_LNK', 'https://t.me/+sGC3kK3Q9L1kNDNl')
+CHNL_LNK = environ.get('CHNL_LNK', 'https://t.me/+fDkIGNmk5BU5ODVl')
+TUTORIAL = environ.get('TUTORIAL', 'https://t.me/how_to_opan_linkz/6')
+IS_TUTORIAL = bool(environ.get('IS_TUTORIAL', True))
+MSG_ALRT = environ.get('MSG_ALRT', 'Piracy Is Crime')
+LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '-1001693006436'))
+SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'https://t.me/+sGC3kK3Q9L1kNDNl')
+P_TTI_SHOW_OFF = is_enabled((environ.get('P_TTI_SHOW_OFF', "True")), True)
+IMDB = is_enabled((environ.get('IMDB', "True")), True)
+AUTO_FFILTER = is_enabled((environ.get('AUTO_FFILTER', "True")), True)
+AUTO_DELETE = is_enabled((environ.get('AUTO_DELETE', "True")), True)
+SINGLE_BUTTON = is_enabled((environ.get('SINGLE_BUTTON', "True")), True)
+CUSTOM_FILE_CAPTION = environ.get("CUSTOM_FILE_CAPTION", f"{script.CAPTION}")
+BATCH_FILE_CAPTION = environ.get("BATCH_FILE_CAPTION", CUSTOM_FILE_CAPTION)
+IMDB_TEMPLATE = environ.get("IMDB_TEMPLATE", f"{script.IMDB_TEMPLATE_TXT}")
+LONG_IMDB_DESCRIPTION = is_enabled(environ.get("LONG_IMDB_DESCRIPTION", "False"), False)
+SPELL_CHECK_REPLY = is_enabled(environ.get("SPELL_CHECK_REPLY", "True"), True)
+MAX_LIST_ELM = environ.get("MAX_LIST_ELM", None)
+INDEX_REQ_CHANNEL = int(environ.get('INDEX_REQ_CHANNEL', LOG_CHANNEL))
+FILE_STORE_CHANNEL = [int(ch) for ch in (environ.get('FILE_STORE_CHANNEL', '-1001683081282')).split()]
+MELCOW_NEW_USERS = is_enabled((environ.get('MELCOW_NEW_USERS', "True")), True)
+PROTECT_CONTENT = is_enabled((environ.get('PROTECT_CONTENT', "False")), False)
+PUBLIC_FILE_STORE = is_enabled((environ.get('PUBLIC_FILE_STORE', "True")), True)
+DELETE_TIME = int(environ.get('DELETE_TIME', '900'))
 
-# ============================
-# Configuration Classes
-# ============================
+LANGUAGES = ["malayalam", "mal", "tamil", "tam" ,"english", "eng", "hindi", "hin", "telugu", "tel", "kannada", "kan"]
 
-class BotConfiguration(BaseSettings):
-    model_config = SettingsConfigDict(
-        env_file=".env",
-        env_file_encoding="utf-8",
-        extra="ignore"
-    )
-
-    session: str = Field(default="KR_PICTURE")
-    api_id: int = Field(..., description="Telegram API ID")
-    api_hash: str = Field(..., description="Telegram API Hash")
-    bot_token: str = Field(..., description="Bot token from BotFather")
-    cache_time: int = Field(default=300, ge=0)
-    use_caption_filter: bool = Field(default=True)
-
-    @field_validator('api_id')
-    def check_api_id(cls, v):
-        if v <= 0:
-            raise ValueError("API ID must be positive")
-        return v
-
-    @field_validator('bot_token')
-    def check_bot_token(cls, v):
-        if not v or len(v) < 10:
-            raise ValueError("Bot token is required and must be valid")
-        return v
-
-
-class MediaConfiguration(BaseSettings):
-    model_config = SettingsConfigDict(env_prefix="MEDIA_", case_sensitive=False)
-
-    pics: List[str] = Field(default=["https://envs.sh/t3L.jpg"])
-    normal_image: str = Field(default="https://graph.org/file/e20b5fdaf217252964202.jpg", alias="NOR_IMG")
-    welcome_video: str = Field(default="https://graph.org/file/60e8a622b14796e4448ce.mp4", alias="MELCOW_VID")
-    spell_image: str = Field(default="https://envs.sh/t3L.jpg", alias="SPELL_IMG")
-    subscription_image: str = Field(default="https://graph.org/file/242b7f1b52743938d81f1.jpg", alias="SUBSCRIPTION")
-    fsub_pics: List[str] = Field(default=["https://graph.org/file/7478ff3eac37f4329c3d8.jpg"])
-
-    @field_validator('pics', 'fsub_pics', mode='before')
-    def split_urls(cls, v):
-        if isinstance(v, str):
-            return v.split()
-        return v
-
-    @field_validator('normal_image', 'welcome_video', 'spell_image', 'subscription_image')
-    def validate_urls(cls, v):
-        parsed = urlparse(v)
-        if not all([parsed.scheme, parsed.netloc]):
-            raise ValueError(f"Invalid URL: {v}")
-        return v
-
-
-class ChannelConfiguration(BaseSettings):
-    model_config = SettingsConfigDict(env_prefix="CHANNEL_", case_sensitive=False)
-
-    admins: List[Union[int, str]] = Field(default=[2068233407, 2098589219])
-    channels: List[Union[int, str]] = Field(default=[-1001683081282])
-    log_channel: int = Field(default=-1001693006436)
-    bin_channel: int = Field(default=-1001693006436)
-    movie_update_channel: int = Field(default=-1001683081282, alias="DEENDAYAL_MOVIE_UPDATE_CHANNEL")
-    premium_logs: int = Field(default=-1001693006436)
-    auth_channel: Optional[int] = None
-    delete_channels: List[Union[int, str]] = Field(default=[-1001396923650])
-    support_chat_id: int = Field(default=-1002241869735)
-    request_channel: int = Field(default=-1002617590596, alias="REQST_CHANNEL")
-    multi_fsub: List[int] = Field(default=[])
-
-    @field_validator('admins', 'channels', 'delete_channels', mode='before')
-    def parse_ids(cls, v):
-        if isinstance(v, str):
-            return [int(x) if ID_PATTERN.match(x) else x for x in v.split()]
-        return v
-
-    @field_validator('multi_fsub', mode='before')
-    def parse_multi_fsub(cls, v):
-        if isinstance(v, str):
-            return [int(x) for x in v.split() if ID_PATTERN.match(x)]
-        return v
+SEASONS = ["season 1" , "season 2" , "season 3" , "season 4", "season 5" , "season 6" , "season 7" , "season 8" , "season 9" , "season 10"]
 
 
-class DatabaseConfiguration(BaseSettings):
-    model_config = SettingsConfigDict(env_prefix="DB_", case_sensitive=False)
 
-    primary_uri: str = Field(..., alias="DATABASE_URI")
-    secondary_uri: Optional[str] = Field(default=None, alias="DATABASE_URI2")
-    database_name: str = Field(default="Filter2")
-    collection_name: str = Field(default="KR_PICTURE")
+# Online Stream and Download
+NO_PORT = bool(environ.get('NO_PORT', False))
+APP_NAME = None
+if 'DYNO' in environ:
+    ON_HEROKU = True
+    APP_NAME = environ.get('APP_NAME')
+else:
+    ON_HEROKU = False
+BIND_ADRESS = str(getenv('WEB_SERVER_BIND_ADDRESS', '0.0.0.0'))
+FQDN = str(getenv('FQDN', BIND_ADRESS)) if not ON_HEROKU or getenv('FQDN') else APP_NAME+'.herokuapp.com'
+URL = "https://{}/".format(FQDN) if ON_HEROKU or NO_PORT else \
+    "https://{}/".format(FQDN, PORT)
+SLEEP_THRESHOLD = int(environ.get('SLEEP_THRESHOLD', '60'))
+WORKERS = int(environ.get('WORKERS', '4'))
+SESSION_NAME = str(environ.get('SESSION_NAME', 'KR_PICTURE'))
+MULTI_CLIENT = False
+name = str(environ.get('name', 'KR_PICTURE'))
+PING_INTERVAL = int(environ.get("PING_INTERVAL", "1200"))  # 20 minutes
+if 'DYNO' in environ:
+    ON_HEROKU = True
+    APP_NAME = str(getenv('APP_NAME'))
 
-    @field_validator('primary_uri')
-    def validate_primary_uri(cls, v):
-        if not v:
-            raise ValueError("Primary database URI is required")
-        return v
-
-
-class FeatureConfiguration(BaseSettings):
-    model_config = SettingsConfigDict(case_sensitive=False)
-
-    movie_update_notification: bool = Field(default=True, alias="DEENDAYAL_MOVIE_UPDATE_NOTIFICATION")
-    image_fetch: bool = Field(default=True, alias="DEENDAYAL_IMAGE_FETCH")
-    verify_users: bool = Field(default=False, alias="VERIFY")
-    verify_expire_days: int = Field(default=1, ge=1, alias="DEENDAYAL_VERIFY_EXPIRE")
-    verified_log_channel: int = Field(default=-1001693006436, alias="DEENDAYAL_VERIFIED_LOG")
-    enable_shortlink: bool = Field(default=False, alias="IS_SHORTLINK")
-    shortlink_url: str = Field(default="vplink.in")
-    shortlink_api: str = Field(default="")
-    enable_tutorial: bool = Field(default=False, alias="IS_TUTORIAL")
-    no_results_msg: bool = Field(default=True)
-    max_buttons: int = Field(default=5, ge=1, le=10, alias="MAX_B_TN")
-    max_btn_enabled: bool = Field(default=True, alias="MAX_BTN")
-    imdb_enabled: bool = Field(default=False, alias="IMDB")
-    auto_filter: bool = Field(default=True, alias="AUTO_FFILTER")
-    auto_delete: bool = Field(default=True, alias="AUTO_DELETE")
-    delete_time: int = Field(default=900, ge=60)
-    single_button: bool = Field(default=True)
-    long_imdb_description: bool = Field(default=False)
-    spell_check_reply: bool = Field(default=True)
-    protect_content: bool = Field(default=True)
-    public_file_store: bool = Field(default=True)
-    pm_search: bool = Field(default=False)
-    emoji_mode: bool = Field(default=False)
-    stream_mode: bool = Field(default=False)
+else:
+    ON_HEROKU = False
+HAS_SSL=bool(getenv('HAS_SSL',False))
+if HAS_SSL:
+    URL = "https://{}/".format(FQDN)
+else:
+    URL = "http://{}/".format(FQDN)
 
 
-class ServerConfiguration(BaseSettings):
-    model_config = SettingsConfigDict(case_sensitive=False)
 
-    port: int = Field(default=8080, ge=1, le=65535)
-    bind_address: str = Field(default="0.0.0.0", alias="WEB_SERVER_BIND_ADDRESS")
-    workers: int = Field(default=4, ge=1, le=32)
-    sleep_threshold: int = Field(default=60, ge=10)
-    ping_interval: int = Field(default=1200, ge=300)
-    app_name: Optional[str] = None
-    has_ssl: bool = Field(default=True)
-    no_port: bool = Field(default=False)
-
-    @property
-    def on_heroku(self) -> bool:
-        return bool(self.app_name)
-
-    @property
-    def fqdn(self) -> str:
-        return f"{self.app_name}.herokuapp.com" if self.on_heroku else self.bind_address
-
-    @property
-    def base_url(self) -> str:
-        protocol = "https" if self.has_ssl else "http"
-        port_suffix = "" if self.no_port else f":{self.port}"
-        return f"{protocol}://{self.fqdn}{port_suffix}/"
-
-
-class PaymentConfiguration(BaseSettings):
-    model_config = SettingsConfigDict(env_prefix="PAYMENT_", case_sensitive=False)
-
-    qr_code: str = Field(default="https://envs.sh/t3L.jpg", alias="QR_CODE")
-    owner_upi_id: str = Field(default="xyz@123")
-
-
-class LinksConfiguration(BaseSettings):
-    model_config = SettingsConfigDict(env_prefix="LINK_", case_sensitive=False)
-
-    group: str = Field(default="https://t.me/+x6OfRDdUPrUwZTZl", alias="GRP_LNK")
-    channel: str = Field(default="https://t.me/+fDkIGNmk5BU5ODVl", alias="CHNL_LNK")
-    owner: str = Field(default="https://t.me/NIKHIL5757H", alias="OWNER_LNK")
-    movie_update: str = Field(default="https://t.me/KR_PICTURE", alias="DEENDAYAL_MOVIE_UPDATE_CHANNEL_LNK")
-    tutorial: str = Field(default="https://t.me/how_to_opan_linkz/6", alias="TUTORIAL")
-    how_to_verify: str = Field(default="https://t.me/how_to_opan_linkz/6")
-
-
-# ============================
-# Main Combined Config
-# ============================
-
-class DeendayalBotConfig(BaseSettings):
-    model_config = SettingsConfigDict(
-        env_file=".env",
-        env_file_encoding="utf-8",
-        extra="ignore",
-        validate_default=True
-    )
-
-    bot: BotConfiguration = Field(default_factory=BotConfiguration)
-    media: MediaConfiguration = Field(default_factory=MediaConfiguration)
-    channels: ChannelConfiguration = Field(default_factory=ChannelConfiguration)
-    database: DatabaseConfiguration = Field(default_factory=DatabaseConfiguration)
-    features: FeatureConfiguration = Field(default_factory=FeatureConfiguration)
-    server: ServerConfiguration = Field(default_factory=ServerConfiguration)
-    payment: PaymentConfiguration = Field(default_factory=PaymentConfiguration)
-    links: LinksConfiguration = Field(default_factory=LinksConfiguration)
-
-    owner_id: int = Field(default=2068233407, alias="OWNERID")
-    msg_alert: str = Field(default="Share & Support Us ♥️")
-    session_name: str = Field(default="DeendayalBot")
-    custom_file_caption: str = Field(default="")
-    batch_file_caption: str = Field(default="")
-    imdb_template: str = Field(default="")
-    auth_users: List[Union[int, str]] = Field(default=[])
-    premium_users: List[Union[int, str]] = Field(default=[])
-    file_store_channels: List[int] = Field(default=[])
-    caption_languages: List[str] = Field(default=[
-        "Bhojpuri","Hindi","Bengali","Tamil","English","Bangla","Telugu",
-        "Malayalam","Kannada","Marathi","Punjabi","Bengoli","Gujarati",
-        "Korean","Spanish","French","German","Chinese","Arabic",
-        "Portuguese","Russian","Japanese","Odia","Assamese","Urdu"
-    ])
-    reactions: List[str] = Field(default=[
-        "🤝","😇","🤗","😍","👍","🎅","😐","🥰","🤩","😱","🤣","😘",
-        "👏","😛","😈","🎉","⚡️","🫡","🤓","😎","🏆","🔥","🤭","🌚",
-        "🆒","👻","😁"
-    ])
-
-    @root_validator
-    def set_defaults(cls, values):
-        # Fallback captions/templates
-        values['custom_file_caption'] = values.get('custom_file_caption') or getattr(script, 'CAPTION', '')
-        values['batch_file_caption'] = values.get('batch_file_caption') or values['custom_file_caption']
-        values['imdb_template'] = values.get('imdb_template') or getattr(script, 'IMDB_TEMPLATE_TXT', '')
-        return values
-
-    @field_validator('auth_users', 'premium_users', 'file_store_channels', mode='before')
-    def parse_lists(cls, v):
-        if isinstance(v, str):
-            return [int(x) if ID_PATTERN.match(x) else x for x in v.split()]
-        return v
-
-    @property
-    def multi_client(self) -> dict:
-        parser = TokenParser(self.bot.bot_token)
-        return {1: self.bot.bot_token}
-
-    @property
-    def log_summary(self) -> str:
-        return "\n".join([
-            f"IMDB Results: {'enabled' if self.features.imdb_enabled else 'disabled'}",
-            f"PM Redirect: {'enabled' if not self.features.pm_search else 'disabled'}",
-            f"Single Button Mode: {'enabled' if self.features.single_button else 'disabled'}",
-            f"Custom Caption: {self.custom_file_caption[:50] if self.custom_file_caption else 'Default'}",
-            f"Long IMDB Description: {'enabled' if self.features.long_imdb_description else 'disabled'}",
-            f"Spell Check: {'enabled' if self.features.spell_check_reply else 'disabled'}",
-            f"Auto Delete: {'enabled' if self.features.auto_delete else 'disabled'} ({self.features.delete_time}s)",
-        ])
-
-
-# ============================
-# Global Config Instance
-# ============================
-
-try:
-    config = DeendayalBotConfig()
-except Exception as e:
-    print(f"Configuration error: {e}")
-    raise
+LOG_STR = "Current Cusomized Configurations are:-\n"
+LOG_STR += ("IMDB Results are enabled, Bot will be showing imdb details for you queries.\n" if IMDB else "IMBD Results are disabled.\n")
+LOG_STR += ("P_TTI_SHOW_OFF found , Users will be redirected to send /start to Bot PM instead of sending file file directly\n" if P_TTI_SHOW_OFF else "P_TTI_SHOW_OFF is disabled files will be send in PM, instead of sending start.\n")
+LOG_STR += ("SINGLE_BUTTON is Found, filename and files size will be shown in a single button instead of two separate buttons\n" if SINGLE_BUTTON else "SINGLE_BUTTON is disabled , filename and file_sixe will be shown as different buttons\n")
+LOG_STR += (f"CUSTOM_FILE_CAPTION enabled with value {CUSTOM_FILE_CAPTION}, your files will be send along with this customized caption.\n" if CUSTOM_FILE_CAPTION else "No CUSTOM_FILE_CAPTION Found, Default captions of file will be used.\n")
+LOG_STR += ("Long IMDB storyline enabled." if LONG_IMDB_DESCRIPTION else "LONG_IMDB_DESCRIPTION is disabled , Plot will be shorter.\n")
+LOG_STR += ("Spell Check Mode Is Enabled, bot will be suggesting related movies if movie not found\n" if SPELL_CHECK_REPLY else "SPELL_CHECK_REPLY Mode disabled\n")
+LOG_STR += (f"MAX_LIST_ELM Found, long list will be shortened to first {MAX_LIST_ELM} elements\n" if MAX_LIST_ELM else "Full List of casts and crew will be shown in imdb template, restrict them by adding a value to MAX_LIST_ELM\n")
+LOG_STR += f"Your current IMDB template is {IMDB_TEMPLATE}"
