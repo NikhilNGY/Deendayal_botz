@@ -132,6 +132,7 @@ VERIFY_IMG = environ.get("VERIFY_IMG", "https://telegra.ph/file/9ecc5d6e4df5b834
 SHORTLINK_URL = environ.get("SHORTLINK_URL", "")
 SHORTLINK_API = environ.get("SHORTLINK_API", "")
 IS_SHORTLINK = environ.get("IS_SHORTLINK", "")
+TUTORIAL = environ.get('TUTORIAL', 'https://t.me/how_to_opan_linkz/6')  # Tutorial video link for opening shortlink website
 IS_TUTORIAL = is_enabled(environ.get('IS_TUTORIAL', "False"), False)
 
 SHORTENER_API = environ.get("SHORTENER_API", "")
