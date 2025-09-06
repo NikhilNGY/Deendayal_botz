@@ -24,6 +24,7 @@ API_HASH = environ.get('API_HASH', '840111f82bbd1d2d3de5055afccf6a92')
 BOT_TOKEN = environ.get('BOT_TOKEN', "")
 
 
+
 # ============================
 # Bot Settings Configuration
 # ============================
@@ -52,6 +53,7 @@ MAX_LIST_ELM = environ.get("MAX_LIST_ELM", None)
 
 # Example default languages
 CAPTION_LANGUAGES = ["en", "hi", "kn"]  # English, Hindi, Kannada
+DEENDAYAL_MOVIE_UPDATE_NOTIFICATION = bool(environ.get('DEENDAYAL_MOVIE_UPDATE_NOTIFICATION', False))  # Notification On (True) / Off (False)
 
 
 # ============================
