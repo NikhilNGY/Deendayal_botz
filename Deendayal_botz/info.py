@@ -15,7 +15,7 @@ def is_enabled(value, default):
 SESSION = environ.get('SESSION', 'KR_PICTURE')
 API_ID = int(environ.get('API_ID', '22525529'))
 API_HASH = environ.get('API_HASH', '840111f82bbd1d2d3de5055afccf6a92')
-BOT_TOKEN = environ.get('BOT_TOKEN', "6065501510:AAHTTxh94rg3LKYhy762fEF9xlqiw5whsG0")
+BOT_TOKEN = environ.get('BOT_TOKEN', " ")
 
 # Bot settings
 CACHE_TIME = int(environ.get('CACHE_TIME', 300))
