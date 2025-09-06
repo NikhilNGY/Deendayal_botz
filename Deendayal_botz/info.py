@@ -10,8 +10,9 @@ from pathlib import Path
 from typing import List, Optional, Union
 from urllib.parse import urlparse
 
-from pydantic import BaseSettings, Field, validator, root_validator
-from pydantic_settings import SettingsConfigDict
+# Pydantic v2 imports
+from pydantic import Field, field_validator, model_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from Deendayal_botz.script import script
 from Deendayal_botz.token_parser import TokenParser
